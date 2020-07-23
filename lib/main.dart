@@ -11,17 +11,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ToDo Flutter Sample',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      initialRoute: '/',
-      routes: <String, WidgetBuilder> {
-        '/': (BuildContext context) => HomePage(),
-        '/sign_in': (BuildContext context) => SignInPage(),
-      }
-    );
+        title: 'ToDo Flutter Sample',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) => HomePage(),
+          '/sign_in': (BuildContext context) => SignInPage(),
+        });
   }
 }
-

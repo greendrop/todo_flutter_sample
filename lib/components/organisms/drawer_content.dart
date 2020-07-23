@@ -8,7 +8,7 @@ class DrawerContent extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             child: Center(
-            child: Text(
+              child: Text(
                 'ToDo Flutter Sample',
                 style: TextStyle(
                   fontSize: 24,
@@ -37,4 +37,3 @@ class DrawerContent extends StatelessWidget {
     );
   }
 }
-
