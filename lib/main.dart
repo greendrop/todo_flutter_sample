@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_sample/components/pages/home_page.dart';
+import 'package:todo_flutter_sample/components/pages/sign_in_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder> {
         '/': (BuildContext context) => HomePage(),
+        '/sign_in': (BuildContext context) => SignInPage(),
       }
     );
   }

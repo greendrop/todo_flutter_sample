@@ -26,6 +26,12 @@ class DrawerContent extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/');
             },
           ),
+          ListTile(
+            title: const Text('Sign in'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed('/sign_in');
+            },
+          ),
         ],
       ),
     );
