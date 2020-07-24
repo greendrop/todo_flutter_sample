@@ -1,0 +1,7 @@
+#include "Generated.xcconfig"
+TRACK_WIDGET_CREATION=
+
+FLUTTER_FLAVOR=prod
+PRODUCT_BUNDLE_IDENTIFIER=com.example.todo_flutter_sample
+DISPLAY_NAME=ToDo Flutter Sample
+FLUTTER_TARGET=lib/main_prod.dart

@@ -45,6 +45,20 @@ android {
         versionName flutterVersionName
     }
 
+    flavorDimensions "app"
+    productFlavors {
+        local {
+            dimension "app"
+            applicationId "com.example.todo_flutter_sample.local"
+        }
+
+        prod {
+            dimension "app"
+            applicationId "com.example.todo_flutter_sample"
+        }
+    }
+
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
