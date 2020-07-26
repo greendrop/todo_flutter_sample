@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/organisms/drawer_content.dart';
+import 'package:todo_flutter_sample/helpers/oauth2_client.dart';
+import 'package:todo_flutter_sample/states/auth_state.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SignInPage extends StatelessWidget {
@@ -10,6 +13,7 @@ class SignInPage extends StatelessWidget {
     const title = 'Sign in Page';
     WebViewController controller;
     final controllerCompleter = Completer<WebViewController>();
+    final oauth2Client = OAuth2Client();
 
     return WillPopScope(
       onWillPop: () async {
@@ -29,17 +33,24 @@ class SignInPage extends StatelessWidget {
           drawer: DrawerContent(),
           body: Builder(builder: (BuildContext context) {
             return WebView(
-              initialUrl: 'https://www.yahoo.co.jp',
+              initialUrl: oauth2Client.getAuthorizationUrl(),
               javascriptMode: JavascriptMode.unrestricted,
               gestureNavigationEnabled: true,
               onWebViewCreated: (WebViewController webViewController) async {
                 controller = webViewController;
                 controllerCompleter.complete(webViewController);
               },
-              onPageStarted: (String url) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(url),
-                ));
+              onPageStarted: (String url) async {
+                if (oauth2Client.isRedirectUrlWithCode(url)) {
+                  final code = OAuth2Client().getCodeFromUrl(url);
+                  final success = await context
+                      .read<AuthStateNotifier>()
+                      .fetchTokenAndUserByCode(code);
+
+                  if (success) {
+                    await Navigator.of(context).pushReplacementNamed('/');
+                  }
+                }
               },
             );
           })),

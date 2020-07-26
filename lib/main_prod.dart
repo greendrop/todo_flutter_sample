@@ -4,8 +4,6 @@ import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/config/environments/prod.dart';
 
 void main() {
-  final configuredApp =
-      AppConfig(env: 'local', envConfig: EnvConfigProd(), child: AppRoot());
-
-  runApp(configuredApp);
+  final _ = AppConfig()..envConfig = EnvConfigProd();
+  runApp(AppRoot());
 }
