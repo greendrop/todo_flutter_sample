@@ -35,6 +35,12 @@ class DrawerContent extends StatelessWidget {
     if (token != null && token.isSignedIn(user)) {
       children.addAll([
         ListTile(
+          title: const Text('Tasks'),
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed('/tasks');
+          },
+        ),
+        ListTile(
           title: const Text('Sign out'),
           onTap: () {
             context.read<AuthStateNotifier>().signOut();

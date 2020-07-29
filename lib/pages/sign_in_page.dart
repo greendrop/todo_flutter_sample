@@ -10,7 +10,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const title = 'Sign in Page';
+    const title = 'Sign in';
     WebViewController controller;
     final controllerCompleter = Completer<WebViewController>();
     final oauth2Client = OAuth2Client();

@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
+import 'package:todo_flutter_sample/pages/tasks/list_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/task_list_state.dart';
 
 class AppRoot extends StatelessWidget {
   @override
@@ -32,6 +34,8 @@ class AppRootProvider extends StatelessWidget {
       providers: [
         StateNotifierProvider<AuthStateNotifier, AuthState>(
             create: (_) => AuthStateNotifier()),
+        StateNotifierProvider<TaskListStateNotifier, TaskListState>(
+            create: (_) => TaskListStateNotifier()),
       ],
       child: AppRootMain(),
     );
@@ -51,6 +55,7 @@ class AppRootMain extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           '/': (BuildContext context) => HomePage(),
           '/sign_in': (BuildContext context) => SignInPage(),
+          '/tasks': (BuildContext context) => TaskListPage(),
         });
   }
 }
