@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/user.dart';
+import 'package:todo_flutter_sample/pages/home_page.dart';
+import 'package:todo_flutter_sample/pages/sign_in_page.dart';
+import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 
 class DrawerContent extends StatelessWidget {
@@ -28,7 +31,7 @@ class DrawerContent extends StatelessWidget {
       ListTile(
         title: const Text('Home'),
         onTap: () {
-          Navigator.of(context).pushReplacementNamed('/');
+          Navigator.of(context).pushReplacementNamed(HomePage.routeName);
         },
       ),
     ];
@@ -37,14 +40,14 @@ class DrawerContent extends StatelessWidget {
         ListTile(
           title: const Text('Tasks'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed('/tasks');
+            Navigator.of(context).pushReplacementNamed(TaskListPage.routeName);
           },
         ),
         ListTile(
           title: const Text('Sign out'),
           onTap: () {
             context.read<AuthStateNotifier>().signOut();
-            Navigator.of(context).pushReplacementNamed('/');
+            Navigator.of(context).pushReplacementNamed(HomePage.routeName);
           },
         )
       ]);
@@ -53,7 +56,7 @@ class DrawerContent extends StatelessWidget {
         ListTile(
           title: const Text('Sign in'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed('/sign_in');
+            Navigator.of(context).pushReplacementNamed(SignInPage.routeName);
           },
         )
       ]);

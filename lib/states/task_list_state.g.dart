@@ -20,7 +20,7 @@ _$_TaskListState _$_$_TaskListStateFromJson(Map<String, dynamic> json) {
         ?.toList(),
     totalCount: json['totalCount'] as int ?? 0,
     page: json['page'] as int ?? 1,
-    perPage: json['perPage'] as int ?? 50,
+    perPage: json['perPage'] as int ?? 10,
     maxPage: json['maxPage'] as int ?? 1,
     isLastFetched: json['isLastFetched'] as bool ?? true,
     isFetching: json['isFetching'] as bool ?? false,

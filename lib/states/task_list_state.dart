@@ -126,7 +126,6 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
       if (queryParameters['per_page'] != null) {
         resPerPage = int.parse(queryParameters['per_page']);
       }
-      print(response.headers);
       final resTotalCount = int.parse(response.headers['total-count']);
       setPage(resPage);
       setPerPage(resPerPage);

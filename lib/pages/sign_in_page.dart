@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/organisms/drawer_content.dart';
 import 'package:todo_flutter_sample/helpers/oauth2_client.dart';
+import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SignInPage extends StatelessWidget {
+  static String routeName = '/sign_in';
+
   @override
   Widget build(BuildContext context) {
     const title = 'Sign in';
@@ -48,7 +51,8 @@ class SignInPage extends StatelessWidget {
                       .fetchTokenAndUserByCode(code);
 
                   if (success) {
-                    await Navigator.of(context).pushReplacementNamed('/');
+                    await Navigator.of(context)
+                        .pushReplacementNamed(HomePage.routeName);
                   }
                 }
               },

@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
-import 'package:todo_flutter_sample/pages/tasks/list_page.dart';
+import 'package:todo_flutter_sample/pages/task/detail_page.dart';
+import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/task_detail_state.dart';
 import 'package:todo_flutter_sample/states/task_list_state.dart';
 
 class AppRoot extends StatelessWidget {
@@ -36,6 +38,8 @@ class AppRootProvider extends StatelessWidget {
             create: (_) => AuthStateNotifier()),
         StateNotifierProvider<TaskListStateNotifier, TaskListState>(
             create: (_) => TaskListStateNotifier()),
+        StateNotifierProvider<TaskDetailStateNotifier, TaskDetailState>(
+            create: (_) => TaskDetailStateNotifier()),
       ],
       child: AppRootMain(),
     );
@@ -51,11 +55,12 @@ class AppRootMain extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: '/',
+        initialRoute: HomePage.routeName,
         routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) => HomePage(),
-          '/sign_in': (BuildContext context) => SignInPage(),
-          '/tasks': (BuildContext context) => TaskListPage(),
+          HomePage.routeName: (BuildContext context) => HomePage(),
+          SignInPage.routeName: (BuildContext context) => SignInPage(),
+          TaskListPage.routeName: (BuildContext context) => TaskListPage(),
+          TaskDetailPage.routeName: (BuildContext context) => TaskDetailPage(),
         });
   }
 }

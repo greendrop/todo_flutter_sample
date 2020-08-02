@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_list_item.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/states/task_list_state.dart';
@@ -34,12 +35,10 @@ class TaskListBody extends StatelessWidget {
             context.read<TaskListStateNotifier>().fetchAdditionalTasks({});
           });
 
-          return const Center(
-              child: CircularProgressIndicator(), heightFactor: 2);
+          return CenterCircularProgressIndicator();
         } else {
           if (isFetching) {
-            return const Center(
-                child: CircularProgressIndicator(), heightFactor: 2);
+            return CenterCircularProgressIndicator();
           } else {
             return null;
           }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_sample/helpers/filter.dart';
 import 'package:todo_flutter_sample/models/task.dart';
+import 'package:todo_flutter_sample/pages/task/detail_page.dart';
 
 class TaskListItem extends StatelessWidget {
   const TaskListItem(this.task);
@@ -28,7 +29,10 @@ class TaskListItem extends StatelessWidget {
             children: <Widget>[
               FlatButton(
                 child: const Text('DETAIL'),
-                onPressed: () {/* ... */},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(TaskDetailPage.routeName,
+                      arguments: TaskDetailArguments(task.id));
+                },
               ),
             ],
           ),

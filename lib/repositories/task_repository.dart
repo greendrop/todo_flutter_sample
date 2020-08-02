@@ -21,6 +21,6 @@ class TaskRepository {
 
   Future<http.Response> get(int id) {
     final url = '$_baseUrl/${id.toString()}';
-    return http.get(url);
+    return http.get(url, headers: {'Authorization': headerAuthorization});
   }
 }

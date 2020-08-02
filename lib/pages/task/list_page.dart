@@ -5,10 +5,13 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/molecules/task_list_item.dart';
 import 'package:todo_flutter_sample/components/organisms/drawer_content.dart';
 import 'package:todo_flutter_sample/components/organisms/task_list_body.dart';
+import 'package:todo_flutter_sample/components/templates/page_template.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/states/task_list_state.dart';
 
 class TaskListPage extends StatefulWidget {
+  static String routeName = '/task/list';
+
   @override
   _TaskListPageState createState() => _TaskListPageState();
 }
@@ -37,14 +40,13 @@ class _TaskListPageState extends State<TaskListPage> {
     if (tasks != null) {
       children.addAll(tasks.map((item) => TaskListItem(item)));
     }
-    if (isFetching) {}
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(title),
       ),
       drawer: DrawerContent(),
-      body: TaskListBody(),
+      body: PageTemplate(body: TaskListBody()),
     );
   }
 }
