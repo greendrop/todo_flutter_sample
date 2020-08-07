@@ -22,7 +22,7 @@ class _$AuthStateTearOff {
       bool isFetching = false,
       bool isUnauthorized = false,
       bool isError = false,
-      int errorStatus = 0,
+      int errorStatusCode = 0,
       String errorBody = '',
       bool isRefreshFetching = false}) {
     return _AuthState(
@@ -31,7 +31,7 @@ class _$AuthStateTearOff {
       isFetching: isFetching,
       isUnauthorized: isUnauthorized,
       isError: isError,
-      errorStatus: errorStatus,
+      errorStatusCode: errorStatusCode,
       errorBody: errorBody,
       isRefreshFetching: isRefreshFetching,
     );
@@ -47,7 +47,7 @@ mixin _$AuthState {
   bool get isFetching;
   bool get isUnauthorized;
   bool get isError;
-  int get errorStatus;
+  int get errorStatusCode;
   String get errorBody;
   bool get isRefreshFetching;
 
@@ -64,7 +64,7 @@ abstract class $AuthStateCopyWith<$Res> {
       bool isFetching,
       bool isUnauthorized,
       bool isError,
-      int errorStatus,
+      int errorStatusCode,
       String errorBody,
       bool isRefreshFetching});
 }
@@ -83,7 +83,7 @@ class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
     Object isFetching = freezed,
     Object isUnauthorized = freezed,
     Object isError = freezed,
-    Object errorStatus = freezed,
+    Object errorStatusCode = freezed,
     Object errorBody = freezed,
     Object isRefreshFetching = freezed,
   }) {
@@ -96,8 +96,9 @@ class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
           ? _value.isUnauthorized
           : isUnauthorized as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatus:
-          errorStatus == freezed ? _value.errorStatus : errorStatus as int,
+      errorStatusCode: errorStatusCode == freezed
+          ? _value.errorStatusCode
+          : errorStatusCode as int,
       errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
       isRefreshFetching: isRefreshFetching == freezed
           ? _value.isRefreshFetching
@@ -117,7 +118,7 @@ abstract class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
       bool isFetching,
       bool isUnauthorized,
       bool isError,
-      int errorStatus,
+      int errorStatusCode,
       String errorBody,
       bool isRefreshFetching});
 }
@@ -137,7 +138,7 @@ class __$AuthStateCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
     Object isFetching = freezed,
     Object isUnauthorized = freezed,
     Object isError = freezed,
-    Object errorStatus = freezed,
+    Object errorStatusCode = freezed,
     Object errorBody = freezed,
     Object isRefreshFetching = freezed,
   }) {
@@ -150,8 +151,9 @@ class __$AuthStateCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
           ? _value.isUnauthorized
           : isUnauthorized as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatus:
-          errorStatus == freezed ? _value.errorStatus : errorStatus as int,
+      errorStatusCode: errorStatusCode == freezed
+          ? _value.errorStatusCode
+          : errorStatusCode as int,
       errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
       isRefreshFetching: isRefreshFetching == freezed
           ? _value.isRefreshFetching
@@ -168,13 +170,13 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
       this.isFetching = false,
       this.isUnauthorized = false,
       this.isError = false,
-      this.errorStatus = 0,
+      this.errorStatusCode = 0,
       this.errorBody = '',
       this.isRefreshFetching = false})
       : assert(isFetching != null),
         assert(isUnauthorized != null),
         assert(isError != null),
-        assert(errorStatus != null),
+        assert(errorStatusCode != null),
         assert(errorBody != null),
         assert(isRefreshFetching != null);
 
@@ -196,7 +198,7 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
   final bool isError;
   @JsonKey(defaultValue: 0)
   @override
-  final int errorStatus;
+  final int errorStatusCode;
   @JsonKey(defaultValue: '')
   @override
   final String errorBody;
@@ -206,7 +208,7 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AuthState(token: $token, user: $user, isFetching: $isFetching, isUnauthorized: $isUnauthorized, isError: $isError, errorStatus: $errorStatus, errorBody: $errorBody, isRefreshFetching: $isRefreshFetching)';
+    return 'AuthState(token: $token, user: $user, isFetching: $isFetching, isUnauthorized: $isUnauthorized, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody, isRefreshFetching: $isRefreshFetching)';
   }
 
   @override
@@ -219,7 +221,7 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
       ..add(DiagnosticsProperty('isFetching', isFetching))
       ..add(DiagnosticsProperty('isUnauthorized', isUnauthorized))
       ..add(DiagnosticsProperty('isError', isError))
-      ..add(DiagnosticsProperty('errorStatus', errorStatus))
+      ..add(DiagnosticsProperty('errorStatusCode', errorStatusCode))
       ..add(DiagnosticsProperty('errorBody', errorBody))
       ..add(DiagnosticsProperty('isRefreshFetching', isRefreshFetching));
   }
@@ -241,9 +243,9 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
             (identical(other.isError, isError) ||
                 const DeepCollectionEquality()
                     .equals(other.isError, isError)) &&
-            (identical(other.errorStatus, errorStatus) ||
+            (identical(other.errorStatusCode, errorStatusCode) ||
                 const DeepCollectionEquality()
-                    .equals(other.errorStatus, errorStatus)) &&
+                    .equals(other.errorStatusCode, errorStatusCode)) &&
             (identical(other.errorBody, errorBody) ||
                 const DeepCollectionEquality()
                     .equals(other.errorBody, errorBody)) &&
@@ -260,7 +262,7 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
       const DeepCollectionEquality().hash(isFetching) ^
       const DeepCollectionEquality().hash(isUnauthorized) ^
       const DeepCollectionEquality().hash(isError) ^
-      const DeepCollectionEquality().hash(errorStatus) ^
+      const DeepCollectionEquality().hash(errorStatusCode) ^
       const DeepCollectionEquality().hash(errorBody) ^
       const DeepCollectionEquality().hash(isRefreshFetching);
 
@@ -281,7 +283,7 @@ abstract class _AuthState implements AuthState {
       bool isFetching,
       bool isUnauthorized,
       bool isError,
-      int errorStatus,
+      int errorStatusCode,
       String errorBody,
       bool isRefreshFetching}) = _$_AuthState;
 
@@ -299,7 +301,7 @@ abstract class _AuthState implements AuthState {
   @override
   bool get isError;
   @override
-  int get errorStatus;
+  int get errorStatusCode;
   @override
   String get errorBody;
   @override

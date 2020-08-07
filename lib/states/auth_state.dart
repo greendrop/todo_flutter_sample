@@ -20,7 +20,7 @@ abstract class AuthState with _$AuthState {
     @Default(false) bool isFetching,
     @Default(false) bool isUnauthorized,
     @Default(false) bool isError,
-    @Default(0) int errorStatus,
+    @Default(0) int errorStatusCode,
     @Default('') String errorBody,
     @Default(false) bool isRefreshFetching,
   }) = _AuthState;
@@ -55,8 +55,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isError: isError);
   }
 
-  void setErrorStatus(int errorStatus) {
-    state = state.copyWith(errorStatus: errorStatus);
+  void setErrorStatusCode(int errorStatusCode) {
+    state = state.copyWith(errorStatusCode: errorStatusCode);
   }
 
   void setErrorBody(String errorBody) {
@@ -68,12 +68,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isRefreshFetching: isRefreshFetching);
   }
 
-  void clearToken() {
+  void initialize() {
     setToken(null);
-  }
-
-  void clearUser() {
     setUser(null);
+    setIsFetching(false);
+    setIsUnauthorized(false);
+    setIsError(false);
+    setErrorStatusCode(0);
+    setErrorBody('');
   }
 
   Future<bool> fetchTokenAndUserByCode(String code) async {
@@ -83,7 +85,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     setIsFetching(true);
     setIsUnauthorized(false);
     setIsError(false);
-    setErrorStatus(0);
+    setErrorStatusCode(0);
     setErrorBody('');
 
     final oauth2Client = OAuth2Client();
@@ -114,7 +116,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         success = true;
       } else {
         setIsError(true);
-        setErrorStatus(userResponse.statusCode);
+        setErrorStatusCode(userResponse.statusCode);
         setErrorBody(userResponse.body);
         if (userResponse.statusCode == 401) {
           setIsUnauthorized(true);
@@ -122,7 +124,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       }
     } else {
       setIsError(true);
-      setErrorStatus(accessTokenResponse.statusCode);
+      setErrorStatusCode(accessTokenResponse.statusCode);
       setErrorBody(accessTokenResponse.body);
       if (accessTokenResponse.statusCode == 401) {
         setIsUnauthorized(true);
@@ -140,7 +142,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
     setIsRefreshFetching(true);
     setIsError(false);
-    setErrorStatus(0);
+    setErrorStatusCode(0);
     setErrorBody('');
 
     final oauth2Client = OAuth2Client();
@@ -160,7 +162,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       setToken(fetchedToken);
     } else {
       setIsError(true);
-      setErrorStatus(response.statusCode);
+      setErrorStatusCode(response.statusCode);
       setErrorBody(response.body);
       if (response.statusCode == 401) {
         setIsUnauthorized(true);
@@ -169,8 +171,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   void signOut() {
-    clearToken();
-    clearUser();
+    setToken(null);
+    setUser(null);
     setIsUnauthorized(false);
   }
 }

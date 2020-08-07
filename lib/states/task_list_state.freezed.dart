@@ -27,7 +27,7 @@ class _$TaskListStateTearOff {
       bool isLastFetched = true,
       bool isFetching = false,
       bool isError = false,
-      int errorStatus = 0,
+      int errorStatusCode = 0,
       String errorBody = ''}) {
     return _TaskListState(
       authToken: authToken,
@@ -40,7 +40,7 @@ class _$TaskListStateTearOff {
       isLastFetched: isLastFetched,
       isFetching: isFetching,
       isError: isError,
-      errorStatus: errorStatus,
+      errorStatusCode: errorStatusCode,
       errorBody: errorBody,
     );
   }
@@ -60,7 +60,7 @@ mixin _$TaskListState {
   bool get isLastFetched;
   bool get isFetching;
   bool get isError;
-  int get errorStatus;
+  int get errorStatusCode;
   String get errorBody;
 
   Map<String, dynamic> toJson();
@@ -82,7 +82,7 @@ abstract class $TaskListStateCopyWith<$Res> {
       bool isLastFetched,
       bool isFetching,
       bool isError,
-      int errorStatus,
+      int errorStatusCode,
       String errorBody});
 }
 
@@ -106,7 +106,7 @@ class _$TaskListStateCopyWithImpl<$Res>
     Object isLastFetched = freezed,
     Object isFetching = freezed,
     Object isError = freezed,
-    Object errorStatus = freezed,
+    Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
@@ -124,8 +124,9 @@ class _$TaskListStateCopyWithImpl<$Res>
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatus:
-          errorStatus == freezed ? _value.errorStatus : errorStatus as int,
+      errorStatusCode: errorStatusCode == freezed
+          ? _value.errorStatusCode
+          : errorStatusCode as int,
       errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
@@ -148,7 +149,7 @@ abstract class _$TaskListStateCopyWith<$Res>
       bool isLastFetched,
       bool isFetching,
       bool isError,
-      int errorStatus,
+      int errorStatusCode,
       String errorBody});
 }
 
@@ -174,7 +175,7 @@ class __$TaskListStateCopyWithImpl<$Res>
     Object isLastFetched = freezed,
     Object isFetching = freezed,
     Object isError = freezed,
-    Object errorStatus = freezed,
+    Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_TaskListState(
@@ -192,8 +193,9 @@ class __$TaskListStateCopyWithImpl<$Res>
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatus:
-          errorStatus == freezed ? _value.errorStatus : errorStatus as int,
+      errorStatusCode: errorStatusCode == freezed
+          ? _value.errorStatusCode
+          : errorStatusCode as int,
       errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
@@ -212,7 +214,7 @@ class _$_TaskListState implements _TaskListState {
       this.isLastFetched = true,
       this.isFetching = false,
       this.isError = false,
-      this.errorStatus = 0,
+      this.errorStatusCode = 0,
       this.errorBody = ''})
       : assert(totalCount != null),
         assert(page != null),
@@ -221,7 +223,7 @@ class _$_TaskListState implements _TaskListState {
         assert(isLastFetched != null),
         assert(isFetching != null),
         assert(isError != null),
-        assert(errorStatus != null),
+        assert(errorStatusCode != null),
         assert(errorBody != null);
 
   factory _$_TaskListState.fromJson(Map<String, dynamic> json) =>
@@ -256,14 +258,14 @@ class _$_TaskListState implements _TaskListState {
   final bool isError;
   @JsonKey(defaultValue: 0)
   @override
-  final int errorStatus;
+  final int errorStatusCode;
   @JsonKey(defaultValue: '')
   @override
   final String errorBody;
 
   @override
   String toString() {
-    return 'TaskListState(authToken: $authToken, authUser: $authUser, tasks: $tasks, totalCount: $totalCount, page: $page, perPage: $perPage, maxPage: $maxPage, isLastFetched: $isLastFetched, isFetching: $isFetching, isError: $isError, errorStatus: $errorStatus, errorBody: $errorBody)';
+    return 'TaskListState(authToken: $authToken, authUser: $authUser, tasks: $tasks, totalCount: $totalCount, page: $page, perPage: $perPage, maxPage: $maxPage, isLastFetched: $isLastFetched, isFetching: $isFetching, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
   }
 
   @override
@@ -298,9 +300,9 @@ class _$_TaskListState implements _TaskListState {
             (identical(other.isError, isError) ||
                 const DeepCollectionEquality()
                     .equals(other.isError, isError)) &&
-            (identical(other.errorStatus, errorStatus) ||
+            (identical(other.errorStatusCode, errorStatusCode) ||
                 const DeepCollectionEquality()
-                    .equals(other.errorStatus, errorStatus)) &&
+                    .equals(other.errorStatusCode, errorStatusCode)) &&
             (identical(other.errorBody, errorBody) ||
                 const DeepCollectionEquality()
                     .equals(other.errorBody, errorBody)));
@@ -319,7 +321,7 @@ class _$_TaskListState implements _TaskListState {
       const DeepCollectionEquality().hash(isLastFetched) ^
       const DeepCollectionEquality().hash(isFetching) ^
       const DeepCollectionEquality().hash(isError) ^
-      const DeepCollectionEquality().hash(errorStatus) ^
+      const DeepCollectionEquality().hash(errorStatusCode) ^
       const DeepCollectionEquality().hash(errorBody);
 
   @override
@@ -344,7 +346,7 @@ abstract class _TaskListState implements TaskListState {
       bool isLastFetched,
       bool isFetching,
       bool isError,
-      int errorStatus,
+      int errorStatusCode,
       String errorBody}) = _$_TaskListState;
 
   factory _TaskListState.fromJson(Map<String, dynamic> json) =
@@ -371,7 +373,7 @@ abstract class _TaskListState implements TaskListState {
   @override
   bool get isError;
   @override
-  int get errorStatus;
+  int get errorStatusCode;
   @override
   String get errorBody;
   @override

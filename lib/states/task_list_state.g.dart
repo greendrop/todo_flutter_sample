@@ -25,7 +25,7 @@ _$_TaskListState _$_$_TaskListStateFromJson(Map<String, dynamic> json) {
     isLastFetched: json['isLastFetched'] as bool ?? true,
     isFetching: json['isFetching'] as bool ?? false,
     isError: json['isError'] as bool ?? false,
-    errorStatus: json['errorStatus'] as int ?? 0,
+    errorStatusCode: json['errorStatusCode'] as int ?? 0,
     errorBody: json['errorBody'] as String ?? '',
   );
 }
@@ -42,6 +42,6 @@ Map<String, dynamic> _$_$_TaskListStateToJson(_$_TaskListState instance) =>
       'isLastFetched': instance.isLastFetched,
       'isFetching': instance.isFetching,
       'isError': instance.isError,
-      'errorStatus': instance.errorStatus,
+      'errorStatusCode': instance.errorStatusCode,
       'errorBody': instance.errorBody,
     };

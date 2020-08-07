@@ -26,7 +26,7 @@ abstract class TaskListState with _$TaskListState {
     @Default(true) bool isLastFetched,
     @Default(false) bool isFetching,
     @Default(false) bool isError,
-    @Default(0) int errorStatus,
+    @Default(0) int errorStatusCode,
     @Default('') String errorBody,
   }) = _TaskListState;
   factory TaskListState.fromJson(Map<String, dynamic> json) {
@@ -86,8 +86,8 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
     state = state.copyWith(isError: isError);
   }
 
-  void setErrorStatus(int errorStatus) {
-    state = state.copyWith(errorStatus: errorStatus);
+  void setErrorStatusCode(int errorStatusCode) {
+    state = state.copyWith(errorStatusCode: errorStatusCode);
   }
 
   void setErrorBody(String errorBody) {
@@ -97,6 +97,14 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
   void clearTasks() {
     state = state.copyWith(
         tasks: null, totalCount: 0, page: 1, maxPage: 1, isLastFetched: true);
+  }
+
+  void initialize() {
+    clearTasks();
+    setIsFetching(false);
+    setIsError(false);
+    setErrorStatusCode(0);
+    setErrorBody('');
   }
 
   Future<void> fetchTasks(Map<String, String> queryParameters) async {
@@ -133,7 +141,7 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
       setMaxPage(resTotalCount == 0 ? 1 : (resTotalCount / resPerPage).ceil());
     } else {
       setIsError(true);
-      setErrorStatus(response.statusCode);
+      setErrorStatusCode(response.statusCode);
       setErrorBody(response.body);
     }
     setIsFetching(false);
@@ -170,7 +178,7 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
       setMaxPage(resTotalCount == 0 ? 1 : (resTotalCount / resPerPage).ceil());
     } else {
       setIsError(true);
-      setErrorStatus(response.statusCode);
+      setErrorStatusCode(response.statusCode);
       setErrorBody(response.body);
     }
     setIsFetching(false);

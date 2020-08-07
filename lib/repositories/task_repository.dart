@@ -36,4 +36,14 @@ class TaskRepository {
         },
         body: json.encode(taskForm.toJson()));
   }
+
+  Future<http.Response> update(int id, TaskForm taskForm) {
+    final url = '$_baseUrl/${id.toString()}';
+    return http.put(url,
+        headers: {
+          'Authorization': headerAuthorization,
+          'content-type': 'application/json'
+        },
+        body: json.encode(taskForm.toJson()));
+  }
 }

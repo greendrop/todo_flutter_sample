@@ -1,36 +1,34 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
-import 'package:todo_flutter_sample/models/task.dart';
+import 'package:todo_flutter_sample/models/task_form.dart';
 import 'package:todo_flutter_sample/models/user.dart';
 import 'package:todo_flutter_sample/repositories/task_repository.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 
-part 'task_detail_state.freezed.dart';
-part 'task_detail_state.g.dart';
+part 'task_update_state.freezed.dart';
+part 'task_update_state.g.dart';
 
 @freezed
-abstract class TaskDetailState with _$TaskDetailState {
-  const factory TaskDetailState({
+abstract class TaskUpdateState with _$TaskUpdateState {
+  const factory TaskUpdateState({
     OAuth2Token authToken,
     User authUser,
-    Task task,
-    @Default(false) bool isFetching,
+    @Default(false) bool isUpdating,
     @Default(false) bool isError,
     @Default(0) int errorStatusCode,
     @Default('') String errorBody,
-  }) = _TaskDetailState;
-  factory TaskDetailState.fromJson(Map<String, dynamic> json) {
-    return _$TaskDetailStateFromJson(json);
+  }) = _TaskUpdateState;
+  factory TaskUpdateState.fromJson(Map<String, dynamic> json) {
+    return _$TaskUpdateStateFromJson(json);
   }
 }
 
-class TaskDetailStateNotifier extends StateNotifier<TaskDetailState>
+class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState>
     with LocatorMixin {
-  TaskDetailStateNotifier() : super(const TaskDetailState());
+  TaskUpdateStateNotifier() : super(const TaskUpdateState());
 
   @override
   void initState() {
@@ -48,13 +46,9 @@ class TaskDetailStateNotifier extends StateNotifier<TaskDetailState>
         authToken: watch<AuthState>().token, authUser: watch<AuthState>().user);
   }
 
-  void setTask(Task task) {
-    state = state.copyWith(task: task);
-  }
-
   // ignore: avoid_positional_boolean_parameters
-  void setIsFetching(bool isFetching) {
-    state = state.copyWith(isFetching: isFetching);
+  void setIsUpdating(bool isUpdating) {
+    state = state.copyWith(isUpdating: isUpdating);
   }
 
   // ignore: avoid_positional_boolean_parameters
@@ -71,37 +65,34 @@ class TaskDetailStateNotifier extends StateNotifier<TaskDetailState>
   }
 
   void initialize() {
-    setTask(null);
-    setIsFetching(false);
+    setIsUpdating(false);
     setIsError(false);
     setErrorStatusCode(0);
     setErrorBody('');
   }
 
-  Future<Task> fetchTaskById(int id) async {
-    final completer = Completer<Task>();
-    Task task;
+  Future<bool> updateTask(int id, TaskForm taskForm) async {
+    final completer = Completer<bool>();
+    var success = false;
 
-    setTask(null);
-    setIsFetching(true);
+    setIsUpdating(true);
     setIsError(false);
 
     final taskRepository = TaskRepository()
       ..headerAuthorization = 'Bearer ${state.authToken.accessToken}';
 
-    final response = await taskRepository.get(id);
+    final response = await taskRepository.update(id, taskForm);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      final body = json.decode(response.body) as Map<String, dynamic>;
-      task = Task.fromJson(body);
-      setTask(task);
+      success = true;
     } else {
       setIsError(true);
       setErrorStatusCode(response.statusCode);
       setErrorBody(response.body);
     }
-    setIsFetching(false);
-    completer.complete(task);
+
+    setIsUpdating(false);
+    completer.complete(success);
     return completer.future;
   }
 }

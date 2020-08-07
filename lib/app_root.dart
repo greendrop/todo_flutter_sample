@@ -5,6 +5,7 @@ import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
 import 'package:todo_flutter_sample/pages/task/detail_page.dart';
+import 'package:todo_flutter_sample/pages/task/edit_page.dart';
 import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/pages/task/new_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
@@ -12,6 +13,7 @@ import 'package:todo_flutter_sample/states/task_create_state.dart';
 import 'package:todo_flutter_sample/states/task_detail_state.dart';
 import 'package:todo_flutter_sample/states/task_form_state.dart';
 import 'package:todo_flutter_sample/states/task_list_state.dart';
+import 'package:todo_flutter_sample/states/task_update_state.dart';
 
 class AppRoot extends StatelessWidget {
   @override
@@ -47,6 +49,8 @@ class AppRootProvider extends StatelessWidget {
             create: (_) => TaskFormStateNotifier()),
         StateNotifierProvider<TaskCreateStateNotifier, TaskCreateState>(
             create: (_) => TaskCreateStateNotifier()),
+        StateNotifierProvider<TaskUpdateStateNotifier, TaskUpdateState>(
+            create: (_) => TaskUpdateStateNotifier()),
       ],
       child: AppRootMain(),
     );
@@ -69,6 +73,7 @@ class AppRootMain extends StatelessWidget {
           TaskListPage.routeName: (BuildContext context) => TaskListPage(),
           TaskDetailPage.routeName: (BuildContext context) => TaskDetailPage(),
           TaskNewPage.routeName: (BuildContext context) => TaskNewPage(),
+          TaskEditPage.routeName: (BuildContext context) => TaskEditPage(),
         });
   }
 }

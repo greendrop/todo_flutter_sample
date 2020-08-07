@@ -17,7 +17,7 @@ _$_AuthState _$_$_AuthStateFromJson(Map<String, dynamic> json) {
     isFetching: json['isFetching'] as bool ?? false,
     isUnauthorized: json['isUnauthorized'] as bool ?? false,
     isError: json['isError'] as bool ?? false,
-    errorStatus: json['errorStatus'] as int ?? 0,
+    errorStatusCode: json['errorStatusCode'] as int ?? 0,
     errorBody: json['errorBody'] as String ?? '',
     isRefreshFetching: json['isRefreshFetching'] as bool ?? false,
   );
@@ -30,7 +30,7 @@ Map<String, dynamic> _$_$_AuthStateToJson(_$_AuthState instance) =>
       'isFetching': instance.isFetching,
       'isUnauthorized': instance.isUnauthorized,
       'isError': instance.isError,
-      'errorStatus': instance.errorStatus,
+      'errorStatusCode': instance.errorStatusCode,
       'errorBody': instance.errorBody,
       'isRefreshFetching': instance.isRefreshFetching,
     };
