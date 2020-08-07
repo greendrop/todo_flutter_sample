@@ -9,6 +9,8 @@ import 'package:todo_flutter_sample/components/templates/page_template.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/states/task_list_state.dart';
 
+import 'new_page.dart';
+
 class TaskListPage extends StatefulWidget {
   static String routeName = '/task/list';
 
@@ -33,8 +35,6 @@ class _TaskListPageState extends State<TaskListPage> {
     const title = 'Task list';
     final tasks =
         context.select<TaskListState, List<Task>>((state) => state.tasks);
-    final isFetching =
-        context.select<TaskListState, bool>((state) => state.isFetching);
 
     final children = <Widget>[];
     if (tasks != null) {
@@ -47,6 +47,26 @@ class _TaskListPageState extends State<TaskListPage> {
       ),
       drawer: DrawerContent(),
       body: PageTemplate(body: TaskListBody()),
+      floatingActionButton: _NewFloatingActionButton(),
     );
+  }
+}
+
+class _NewFloatingActionButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(TaskNewPage.routeName).then((value) {
+            context.read<TaskListStateNotifier>().fetchTasks({});
+            if (value is String && (value ?? '') != '') {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text(value),
+              ));
+            }
+          });
+        },
+        tooltip: 'Create',
+        child: Icon(Icons.add));
   }
 }

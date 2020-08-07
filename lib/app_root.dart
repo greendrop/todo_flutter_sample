@@ -6,8 +6,11 @@ import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
 import 'package:todo_flutter_sample/pages/task/detail_page.dart';
 import 'package:todo_flutter_sample/pages/task/list_page.dart';
+import 'package:todo_flutter_sample/pages/task/new_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/task_create_state.dart';
 import 'package:todo_flutter_sample/states/task_detail_state.dart';
+import 'package:todo_flutter_sample/states/task_form_state.dart';
 import 'package:todo_flutter_sample/states/task_list_state.dart';
 
 class AppRoot extends StatelessWidget {
@@ -40,6 +43,10 @@ class AppRootProvider extends StatelessWidget {
             create: (_) => TaskListStateNotifier()),
         StateNotifierProvider<TaskDetailStateNotifier, TaskDetailState>(
             create: (_) => TaskDetailStateNotifier()),
+        StateNotifierProvider<TaskFormStateNotifier, TaskFormState>(
+            create: (_) => TaskFormStateNotifier()),
+        StateNotifierProvider<TaskCreateStateNotifier, TaskCreateState>(
+            create: (_) => TaskCreateStateNotifier()),
       ],
       child: AppRootMain(),
     );
@@ -61,6 +68,7 @@ class AppRootMain extends StatelessWidget {
           SignInPage.routeName: (BuildContext context) => SignInPage(),
           TaskListPage.routeName: (BuildContext context) => TaskListPage(),
           TaskDetailPage.routeName: (BuildContext context) => TaskDetailPage(),
+          TaskNewPage.routeName: (BuildContext context) => TaskNewPage(),
         });
   }
 }
