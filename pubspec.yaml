@@ -42,6 +42,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test:
 
   build_runner: ^1.10.0
   freezed: ^0.11.4
