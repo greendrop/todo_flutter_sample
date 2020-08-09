@@ -31,7 +31,7 @@ class TaskListBody extends StatelessWidget {
 
       if (index == length) {
         if (!isLastFetched) {
-          Timer(const Duration(), () {
+          Timer.run(() {
             context.read<TaskListStateNotifier>().fetchAdditionalTasks({});
           });
 

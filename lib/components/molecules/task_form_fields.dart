@@ -45,7 +45,7 @@ class _TaskFormFieldsState extends State<TaskFormFields> {
         (state) => state.taskForm ?? TaskForm());
 
     if (isInitialized == false) {
-      Timer(const Duration(), () {
+      Timer.run(() {
         _titleTextEditingController.text = taskForm.title ?? '';
         _descriptionTextEditingController.text = taskForm.description ?? '';
         _titleTextEditingController.addListener(_handleTitle);

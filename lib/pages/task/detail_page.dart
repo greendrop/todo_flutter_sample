@@ -23,7 +23,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
     if (isInitialized == false) {
       arguments =
           ModalRoute.of(context).settings.arguments as TaskDetailArguments;
-      Timer(const Duration(), () {
+      Timer.run(() {
         context.read<TaskDetailStateNotifier>().clear();
         context.read<TaskDeleteStateNotifier>().clear();
         context.read<TaskDetailStateNotifier>().fetchTaskById(arguments.id);

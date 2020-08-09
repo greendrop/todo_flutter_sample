@@ -24,7 +24,7 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   Widget build(BuildContext context) {
     if (isInitialized == false) {
-      Timer(const Duration(), () {
+      Timer.run(() {
         context.read<TaskListStateNotifier>().fetchTasks({});
         setState(() {
           isInitialized = true;

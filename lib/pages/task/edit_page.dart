@@ -25,7 +25,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
     if (isInitialized == false) {
       arguments =
           ModalRoute.of(context).settings.arguments as TaskEditArguments;
-      Timer(const Duration(), () async {
+      Timer.run(() async {
         context.read<TaskFormStateNotifier>().clear();
         context.read<TaskUpdateStateNotifier>().clear();
         setState(() {

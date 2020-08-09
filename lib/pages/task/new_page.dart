@@ -20,7 +20,7 @@ class _TaskNewPageState extends State<TaskNewPage> {
   @override
   Widget build(BuildContext context) {
     if (isInitialized == false) {
-      Timer(const Duration(), () {
+      Timer.run(() {
         context.read<TaskFormStateNotifier>().clear();
         context.read<TaskCreateStateNotifier>().clear();
         setState(() {
