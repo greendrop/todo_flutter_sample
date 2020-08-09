@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/organisms/task_detail_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
+import 'package:todo_flutter_sample/states/task_delete_state.dart';
 import 'package:todo_flutter_sample/states/task_detail_state.dart';
 
 class TaskDetailPage extends StatefulWidget {
@@ -23,6 +24,8 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
       arguments =
           ModalRoute.of(context).settings.arguments as TaskDetailArguments;
       Timer(const Duration(), () {
+        context.read<TaskDetailStateNotifier>().clear();
+        context.read<TaskDeleteStateNotifier>().clear();
         context.read<TaskDetailStateNotifier>().fetchTaskById(arguments.id);
         setState(() {
           isInitialized = true;

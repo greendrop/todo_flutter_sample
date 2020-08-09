@@ -37,6 +37,11 @@ class TaskListItem extends StatelessWidget {
                           arguments: TaskDetailArguments(task.id))
                       .then((value) {
                     context.read<TaskListStateNotifier>().fetchTasks({});
+                    if (value is String && (value ?? '') != '') {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text(value),
+                      ));
+                    }
                   });
                 },
               ),

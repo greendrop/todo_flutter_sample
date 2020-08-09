@@ -46,4 +46,9 @@ class TaskRepository {
         },
         body: json.encode(taskForm.toJson()));
   }
+
+  Future<http.Response> delete(int id) {
+    final url = '$_baseUrl/${id.toString()}';
+    return http.delete(url, headers: {'Authorization': headerAuthorization});
+  }
 }

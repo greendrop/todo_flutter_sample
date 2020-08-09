@@ -34,20 +34,24 @@ class _TaskNewBodyState extends State<TaskNewBody> {
               TaskFormFields(),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: RaisedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        final taskCreateState = await context
-                            .read<TaskCreateStateNotifier>()
-                            .createTask(taskForm);
+                  child: Row(children: <Widget>[
+                    Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: RaisedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              final taskCreateState = await context
+                                  .read<TaskCreateStateNotifier>()
+                                  .createTask(taskForm);
 
-                        if (!taskCreateState.isError) {
-                          Navigator.of(context).pop('Created Task.');
-                        }
-                      }
-                    },
-                    child: const Text('CREATE'),
-                  ))
+                              if (!taskCreateState.isError) {
+                                Navigator.of(context).pop('Created Task.');
+                              }
+                            }
+                          },
+                          child: const Text('CREATE'),
+                        ))
+                  ]))
             ]));
   }
 }

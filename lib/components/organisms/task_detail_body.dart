@@ -4,6 +4,7 @@ import 'package:todo_flutter_sample/components/atoms/center_circular_progress_in
 import 'package:todo_flutter_sample/helpers/filter.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/pages/task/edit_page.dart';
+import 'package:todo_flutter_sample/states/task_delete_state.dart';
 import 'package:todo_flutter_sample/states/task_detail_state.dart';
 
 class TaskDetailBody extends StatefulWidget {
@@ -100,24 +101,65 @@ class _TaskDetailBodyState extends State<TaskDetailBody> {
               ),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed(TaskEditPage.routeName,
-                              arguments: TaskEditArguments(task.id))
-                          .then((value) {
-                        context
-                            .read<TaskDetailStateNotifier>()
-                            .fetchTaskById(task.id);
-                        if (value is String && (value ?? '') != '') {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text(value),
-                          ));
-                        }
-                      });
-                    },
-                    child: const Text('EDIT'),
-                  ))
+                  child: Row(children: <Widget>[
+                    Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: RaisedButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(TaskEditPage.routeName,
+                                    arguments: TaskEditArguments(task.id))
+                                .then((value) {
+                              context
+                                  .read<TaskDetailStateNotifier>()
+                                  .fetchTaskById(task.id);
+                              if (value is String && (value ?? '') != '') {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(value),
+                                ));
+                              }
+                            });
+                          },
+                          child: const Text('EDIT'),
+                        )),
+                    Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: RaisedButton(
+                            onPressed: () async {
+                              final result = await _showDeleteDialog();
+                              if (result == 'OK') {
+                                final taskDeleteState = await context
+                                    .read<TaskDeleteStateNotifier>()
+                                    .deleteTask(task.id);
+                                if (!taskDeleteState.isError) {
+                                  Navigator.of(context).pop('Deleted Task.');
+                                }
+                              }
+                            },
+                            child: const Text('DELETE'))),
+                  ]))
             ]));
+  }
+
+  Future<String> _showDeleteDialog() async {
+    return showDialog<String>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Delete Task'),
+            content: const Text('Are you sure?'),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('CANCEL'),
+                onPressed: () => Navigator.pop(context, 'CANCEL'),
+              ),
+              FlatButton(
+                child: const Text('OK'),
+                onPressed: () => Navigator.pop(context, 'OK'),
+              )
+            ],
+          );
+        });
   }
 }

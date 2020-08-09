@@ -38,19 +38,23 @@ class _TaskEditBodyState extends State<TaskEditBody> {
               TaskFormFields(),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: RaisedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        final taskUpdateState = await context
-                            .read<TaskUpdateStateNotifier>()
-                            .updateTask(task.id, taskForm);
-                        if (!taskUpdateState.isError) {
-                          Navigator.of(context).pop('Updated Task.');
-                        }
-                      }
-                    },
-                    child: const Text('UPDATE'),
-                  ))
+                  child: Row(children: <Widget>[
+                    Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: RaisedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              final taskUpdateState = await context
+                                  .read<TaskUpdateStateNotifier>()
+                                  .updateTask(task.id, taskForm);
+                              if (!taskUpdateState.isError) {
+                                Navigator.of(context).pop('Updated Task.');
+                              }
+                            }
+                          },
+                          child: const Text('UPDATE'),
+                        ))
+                  ]))
             ]));
   }
 }
