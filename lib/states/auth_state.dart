@@ -49,6 +49,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
       return OAuth2Token.fromJson(tokenJson);
     });
     state = state.copyWith(token: token);
+    if (token.isNeedRefresh()) {
+      await fetchTokenByRefreshToken(token.refreshToken);
+    }
   }
 
   Future<void> initializeUser() async {
@@ -213,6 +216,12 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
 
     completer.complete(state);
     return completer.future;
+  }
+
+  void refreshToken() {
+    if (state.token != null && state.token.isNeedRefresh()) {
+      fetchTokenByRefreshToken(state.token.refreshToken);
+    }
   }
 
   AuthState signOut() {
