@@ -37,11 +37,11 @@ class _TaskNewBodyState extends State<TaskNewBody> {
                   child: RaisedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        final success = await context
+                        final taskCreateState = await context
                             .read<TaskCreateStateNotifier>()
                             .createTask(taskForm);
 
-                        if (success) {
+                        if (!taskCreateState.isError) {
                           Navigator.of(context).pop('Created Task.');
                         }
                       }

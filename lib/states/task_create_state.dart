@@ -47,33 +47,33 @@ class TaskCreateStateNotifier extends StateNotifier<TaskCreateState>
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsCreating(bool isCreating) {
-    state = state.copyWith(isCreating: isCreating);
+  TaskCreateState setIsCreating(bool isCreating) {
+    return state = state.copyWith(isCreating: isCreating);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsError(bool isError) {
-    state = state.copyWith(isError: isError);
+  TaskCreateState setIsError(bool isError) {
+    return state = state.copyWith(isError: isError);
   }
 
-  void setErrorStatusCode(int errorStatusCode) {
-    state = state.copyWith(errorStatusCode: errorStatusCode);
+  TaskCreateState setErrorStatusCode(int errorStatusCode) {
+    return state = state.copyWith(errorStatusCode: errorStatusCode);
   }
 
-  void setErrorBody(String errorBody) {
-    state = state.copyWith(errorBody: errorBody);
+  TaskCreateState setErrorBody(String errorBody) {
+    return state = state.copyWith(errorBody: errorBody);
   }
 
-  void initialize() {
+  TaskCreateState clear() {
     setIsCreating(false);
     setIsError(false);
     setErrorStatusCode(0);
     setErrorBody('');
+    return state;
   }
 
-  Future<bool> createTask(TaskForm taskForm) async {
-    final completer = Completer<bool>();
-    var success = false;
+  Future<TaskCreateState> createTask(TaskForm taskForm) async {
+    final completer = Completer<TaskCreateState>();
 
     setIsCreating(true);
     setIsError(false);
@@ -84,7 +84,6 @@ class TaskCreateStateNotifier extends StateNotifier<TaskCreateState>
     final response = await taskRepository.create(taskForm);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      success = true;
     } else {
       setIsError(true);
       setErrorStatusCode(response.statusCode);
@@ -92,7 +91,7 @@ class TaskCreateStateNotifier extends StateNotifier<TaskCreateState>
     }
 
     setIsCreating(false);
-    completer.complete(success);
+    completer.complete(state);
     return completer.future;
   }
 }

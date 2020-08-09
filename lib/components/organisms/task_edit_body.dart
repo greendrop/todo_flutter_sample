@@ -41,10 +41,10 @@ class _TaskEditBodyState extends State<TaskEditBody> {
                   child: RaisedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        final success = await context
+                        final taskUpdateState = await context
                             .read<TaskUpdateStateNotifier>()
                             .updateTask(task.id, taskForm);
-                        if (success) {
+                        if (!taskUpdateState.isError) {
                           Navigator.of(context).pop('Updated Task.');
                         }
                       }

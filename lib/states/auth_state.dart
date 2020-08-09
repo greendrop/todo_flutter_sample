@@ -32,43 +32,43 @@ abstract class AuthState with _$AuthState {
 class AuthStateNotifier extends StateNotifier<AuthState> {
   AuthStateNotifier() : super(const AuthState());
 
-  void setToken(OAuth2Token token) {
-    state = state.copyWith(token: token);
+  AuthState setToken(OAuth2Token token) {
+    return state = state.copyWith(token: token);
   }
 
-  void setUser(User user) {
-    state = state.copyWith(user: user);
-  }
-
-  // ignore: avoid_positional_boolean_parameters
-  void setIsFetching(bool isFetching) {
-    state = state.copyWith(isFetching: isFetching);
+  AuthState setUser(User user) {
+    return state = state.copyWith(user: user);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsUnauthorized(bool isUnauthorized) {
-    state = state.copyWith(isUnauthorized: isUnauthorized);
+  AuthState setIsFetching(bool isFetching) {
+    return state = state.copyWith(isFetching: isFetching);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsError(bool isError) {
-    state = state.copyWith(isError: isError);
-  }
-
-  void setErrorStatusCode(int errorStatusCode) {
-    state = state.copyWith(errorStatusCode: errorStatusCode);
-  }
-
-  void setErrorBody(String errorBody) {
-    state = state.copyWith(errorBody: errorBody);
+  AuthState setIsUnauthorized(bool isUnauthorized) {
+    return state = state.copyWith(isUnauthorized: isUnauthorized);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsRefreshFetching(bool isRefreshFetching) {
-    state = state.copyWith(isRefreshFetching: isRefreshFetching);
+  AuthState setIsError(bool isError) {
+    return state = state.copyWith(isError: isError);
   }
 
-  void initialize() {
+  AuthState setErrorStatusCode(int errorStatusCode) {
+    return state = state.copyWith(errorStatusCode: errorStatusCode);
+  }
+
+  AuthState setErrorBody(String errorBody) {
+    return state = state.copyWith(errorBody: errorBody);
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  AuthState setIsRefreshFetching(bool isRefreshFetching) {
+    return state = state.copyWith(isRefreshFetching: isRefreshFetching);
+  }
+
+  AuthState clear() {
     setToken(null);
     setUser(null);
     setIsFetching(false);
@@ -76,11 +76,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     setIsError(false);
     setErrorStatusCode(0);
     setErrorBody('');
+    return state;
   }
 
-  Future<bool> fetchTokenAndUserByCode(String code) async {
-    final completer = Completer<bool>();
-    var success = false;
+  Future<AuthState> fetchTokenAndUserByCode(String code) async {
+    final completer = Completer<AuthState>();
 
     setIsFetching(true);
     setIsUnauthorized(false);
@@ -113,7 +113,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         final body = json.decode(userResponse.body) as Map<String, dynamic>;
         setToken(fetchedToken);
         setUser(User.fromJson(body));
-        success = true;
       } else {
         setIsError(true);
         setErrorStatusCode(userResponse.statusCode);
@@ -131,13 +130,16 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       }
     }
     setIsFetching(false);
-    completer.complete(success);
+    completer.complete(state);
     return completer.future;
   }
 
-  Future<void> fetchTokenByRefreshToken(String refreshToken) async {
+  Future<AuthState> fetchTokenByRefreshToken(String refreshToken) async {
+    final completer = Completer<AuthState>();
+
     if (state.isRefreshFetching) {
-      return;
+      completer.complete(state);
+      return completer.future;
     }
 
     setIsRefreshFetching(true);
@@ -168,11 +170,15 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         setIsUnauthorized(true);
       }
     }
+
+    completer.complete(state);
+    return completer.future;
   }
 
-  void signOut() {
+  AuthState signOut() {
     setToken(null);
     setUser(null);
     setIsUnauthorized(false);
+    return state;
   }
 }

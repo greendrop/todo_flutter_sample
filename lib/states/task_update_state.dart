@@ -47,33 +47,33 @@ class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState>
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsUpdating(bool isUpdating) {
-    state = state.copyWith(isUpdating: isUpdating);
+  TaskUpdateState setIsUpdating(bool isUpdating) {
+    return state = state.copyWith(isUpdating: isUpdating);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsError(bool isError) {
-    state = state.copyWith(isError: isError);
+  TaskUpdateState setIsError(bool isError) {
+    return state = state.copyWith(isError: isError);
   }
 
-  void setErrorStatusCode(int errorStatusCode) {
-    state = state.copyWith(errorStatusCode: errorStatusCode);
+  TaskUpdateState setErrorStatusCode(int errorStatusCode) {
+    return state = state.copyWith(errorStatusCode: errorStatusCode);
   }
 
-  void setErrorBody(String errorBody) {
-    state = state.copyWith(errorBody: errorBody);
+  TaskUpdateState setErrorBody(String errorBody) {
+    return state = state.copyWith(errorBody: errorBody);
   }
 
-  void initialize() {
+  TaskUpdateState clear() {
     setIsUpdating(false);
     setIsError(false);
     setErrorStatusCode(0);
     setErrorBody('');
+    return state;
   }
 
-  Future<bool> updateTask(int id, TaskForm taskForm) async {
-    final completer = Completer<bool>();
-    var success = false;
+  Future<TaskUpdateState> updateTask(int id, TaskForm taskForm) async {
+    final completer = Completer<TaskUpdateState>();
 
     setIsUpdating(true);
     setIsError(false);
@@ -84,15 +84,13 @@ class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState>
     final response = await taskRepository.update(id, taskForm);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      success = true;
     } else {
       setIsError(true);
       setErrorStatusCode(response.statusCode);
       setErrorBody(response.body);
     }
-
     setIsUpdating(false);
-    completer.complete(success);
+    completer.complete(state);
     return completer.future;
   }
 }

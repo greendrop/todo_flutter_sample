@@ -46,11 +46,11 @@ class SignInPage extends StatelessWidget {
               onPageStarted: (String url) async {
                 if (oauth2Client.isRedirectUrlWithCode(url)) {
                   final code = OAuth2Client().getCodeFromUrl(url);
-                  final success = await context
+                  final authState = await context
                       .read<AuthStateNotifier>()
                       .fetchTokenAndUserByCode(code);
 
-                  if (success) {
+                  if (!authState.isError) {
                     await Navigator.of(context)
                         .pushReplacementNamed(HomePage.routeName);
                   }

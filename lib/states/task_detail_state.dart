@@ -48,39 +48,39 @@ class TaskDetailStateNotifier extends StateNotifier<TaskDetailState>
         authToken: watch<AuthState>().token, authUser: watch<AuthState>().user);
   }
 
-  void setTask(Task task) {
-    state = state.copyWith(task: task);
+  TaskDetailState setTask(Task task) {
+    return state = state.copyWith(task: task);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsFetching(bool isFetching) {
-    state = state.copyWith(isFetching: isFetching);
+  TaskDetailState setIsFetching(bool isFetching) {
+    return state = state.copyWith(isFetching: isFetching);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsError(bool isError) {
-    state = state.copyWith(isError: isError);
+  TaskDetailState setIsError(bool isError) {
+    return state = state.copyWith(isError: isError);
   }
 
-  void setErrorStatusCode(int errorStatusCode) {
-    state = state.copyWith(errorStatusCode: errorStatusCode);
+  TaskDetailState setErrorStatusCode(int errorStatusCode) {
+    return state = state.copyWith(errorStatusCode: errorStatusCode);
   }
 
-  void setErrorBody(String errorBody) {
-    state = state.copyWith(errorBody: errorBody);
+  TaskDetailState setErrorBody(String errorBody) {
+    return state = state.copyWith(errorBody: errorBody);
   }
 
-  void initialize() {
+  TaskDetailState clear() {
     setTask(null);
     setIsFetching(false);
     setIsError(false);
     setErrorStatusCode(0);
     setErrorBody('');
+    return state;
   }
 
-  Future<Task> fetchTaskById(int id) async {
-    final completer = Completer<Task>();
-    Task task;
+  Future<TaskDetailState> fetchTaskById(int id) async {
+    final completer = Completer<TaskDetailState>();
 
     setTask(null);
     setIsFetching(true);
@@ -93,15 +93,14 @@ class TaskDetailStateNotifier extends StateNotifier<TaskDetailState>
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final body = json.decode(response.body) as Map<String, dynamic>;
-      task = Task.fromJson(body);
-      setTask(task);
+      setTask(Task.fromJson(body));
     } else {
       setIsError(true);
       setErrorStatusCode(response.statusCode);
       setErrorBody(response.body);
     }
     setIsFetching(false);
-    completer.complete(task);
+    completer.complete(state);
     return completer.future;
   }
 }

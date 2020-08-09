@@ -21,8 +21,8 @@ class _TaskNewPageState extends State<TaskNewPage> {
   Widget build(BuildContext context) {
     if (isInitialized == false) {
       Timer(const Duration(), () {
-        context.read<TaskFormStateNotifier>().initialize();
-        context.read<TaskCreateStateNotifier>().initialize();
+        context.read<TaskFormStateNotifier>().clear();
+        context.read<TaskCreateStateNotifier>().clear();
         setState(() {
           isInitialized = true;
         });

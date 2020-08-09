@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -54,60 +55,64 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
         authToken: watch<AuthState>().token, authUser: watch<AuthState>().user);
   }
 
-  void setTasks(List<Task> tasks) {
-    state = state.copyWith(tasks: tasks);
+  TaskListState setTasks(List<Task> tasks) {
+    return state = state.copyWith(tasks: tasks);
   }
 
-  void setTotalCount(int totalCount) {
-    state = state.copyWith(totalCount: totalCount);
+  TaskListState setTotalCount(int totalCount) {
+    return state = state.copyWith(totalCount: totalCount);
   }
 
-  void setPage(int page) {
+  TaskListState setPage(int page) {
     final isLastFetched = page >= state.maxPage;
-    state = state.copyWith(page: page, isLastFetched: isLastFetched);
+    return state = state.copyWith(page: page, isLastFetched: isLastFetched);
   }
 
-  void setPerPage(int perPage) {
-    state = state.copyWith(perPage: perPage);
+  TaskListState setPerPage(int perPage) {
+    return state = state.copyWith(perPage: perPage);
   }
 
-  void setMaxPage(int maxPage) {
+  TaskListState setMaxPage(int maxPage) {
     final isLastFetched = state.page >= maxPage;
-    state = state.copyWith(maxPage: maxPage, isLastFetched: isLastFetched);
+    return state =
+        state.copyWith(maxPage: maxPage, isLastFetched: isLastFetched);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsFetching(bool isFetching) {
-    state = state.copyWith(isFetching: isFetching);
+  TaskListState setIsFetching(bool isFetching) {
+    return state = state.copyWith(isFetching: isFetching);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  void setIsError(bool isError) {
-    state = state.copyWith(isError: isError);
+  TaskListState setIsError(bool isError) {
+    return state = state.copyWith(isError: isError);
   }
 
-  void setErrorStatusCode(int errorStatusCode) {
-    state = state.copyWith(errorStatusCode: errorStatusCode);
+  TaskListState setErrorStatusCode(int errorStatusCode) {
+    return state = state.copyWith(errorStatusCode: errorStatusCode);
   }
 
-  void setErrorBody(String errorBody) {
-    state = state.copyWith(errorBody: errorBody);
+  TaskListState setErrorBody(String errorBody) {
+    return state = state.copyWith(errorBody: errorBody);
   }
 
-  void clearTasks() {
-    state = state.copyWith(
+  TaskListState clearTasks() {
+    return state = state.copyWith(
         tasks: null, totalCount: 0, page: 1, maxPage: 1, isLastFetched: true);
   }
 
-  void initialize() {
+  TaskListState clear() {
     clearTasks();
     setIsFetching(false);
     setIsError(false);
     setErrorStatusCode(0);
     setErrorBody('');
+    return state;
   }
 
-  Future<void> fetchTasks(Map<String, String> queryParameters) async {
+  Future<TaskListState> fetchTasks(Map<String, String> queryParameters) async {
+    final completer = Completer<TaskListState>();
+
     clearTasks();
     setIsFetching(true);
     setIsError(false);
@@ -145,9 +150,14 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
       setErrorBody(response.body);
     }
     setIsFetching(false);
+    completer.complete(state);
+    return completer.future;
   }
 
-  Future<void> fetchAdditionalTasks(Map<String, String> queryParameters) async {
+  Future<TaskListState> fetchAdditionalTasks(
+      Map<String, String> queryParameters) async {
+    final completer = Completer<TaskListState>();
+
     setIsFetching(true);
     setIsError(false);
 
@@ -182,5 +192,7 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
       setErrorBody(response.body);
     }
     setIsFetching(false);
+    completer.complete(state);
+    return completer.future;
   }
 }

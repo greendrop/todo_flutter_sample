@@ -26,15 +26,16 @@ class _TaskEditPageState extends State<TaskEditPage> {
       arguments =
           ModalRoute.of(context).settings.arguments as TaskEditArguments;
       Timer(const Duration(), () async {
-        context.read<TaskFormStateNotifier>().initialize();
-        context.read<TaskUpdateStateNotifier>().initialize();
+        context.read<TaskFormStateNotifier>().clear();
+        context.read<TaskUpdateStateNotifier>().clear();
         setState(() {
           isInitialized = true;
         });
 
-        final task = await context
+        final taskDetailState = await context
             .read<TaskDetailStateNotifier>()
             .fetchTaskById(arguments.id);
+        final task = taskDetailState.task;
         if (task != null) {
           context
               .read<TaskFormStateNotifier>()

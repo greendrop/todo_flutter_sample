@@ -18,12 +18,13 @@ abstract class TaskFormState with _$TaskFormState {
 class TaskFormStateNotifier extends StateNotifier<TaskFormState> {
   TaskFormStateNotifier() : super(const TaskFormState());
 
-  void setTaskForm(TaskForm taskForm) {
-    state = state.copyWith(taskForm: taskForm);
+  TaskFormState setTaskForm(TaskForm taskForm) {
+    return state = state.copyWith(taskForm: taskForm);
   }
 
-  void initialize() {
+  TaskFormState clear() {
     setTaskForm(TaskForm());
+    return state;
   }
 
   void handleTitle(String value) {
