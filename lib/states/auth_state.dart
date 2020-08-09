@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:todo_flutter_sample/helpers/oauth2_client.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
@@ -29,14 +30,53 @@ abstract class AuthState with _$AuthState {
   }
 }
 
-class AuthStateNotifier extends StateNotifier<AuthState> {
+class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
   AuthStateNotifier() : super(const AuthState());
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeToken();
+    initializeUser();
+  }
+
+  Future<void> initializeToken() async {
+    final token = await _prefs.then((prefs) {
+      final tokenJson =
+          json.decode(prefs.getString('authToken')) as Map<String, dynamic>;
+      return OAuth2Token.fromJson(tokenJson);
+    });
+    state = state.copyWith(token: token);
+  }
+
+  Future<void> initializeUser() async {
+    final user = await _prefs.then((prefs) {
+      final userJson =
+          json.decode(prefs.getString('authUser')) as Map<String, dynamic>;
+      return User.fromJson(userJson);
+    });
+    state = state.copyWith(user: user);
+  }
+
+  Future<bool> setTokenToPrefs(OAuth2Token token) async {
+    final prefs = await _prefs;
+    return prefs.setString('authToken', json.encode(token.toJson()));
+  }
+
+  Future<bool> setUserToPrefs(User user) async {
+    final prefs = await _prefs;
+    return prefs.setString('authUser', json.encode(user.toJson()));
+  }
+
   AuthState setToken(OAuth2Token token) {
+    setTokenToPrefs(token);
     return state = state.copyWith(token: token);
   }
 
   AuthState setUser(User user) {
+    setUserToPrefs(user);
     return state = state.copyWith(user: user);
   }
 
