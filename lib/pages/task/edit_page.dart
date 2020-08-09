@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/organisms/task_edit_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/states/task_detail_state.dart';
-import 'package:todo_flutter_sample/states/task_form_state.dart';
-import 'package:todo_flutter_sample/states/task_update_state.dart';
+import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
+import 'package:todo_flutter_sample/states/task/task_form_state.dart';
+import 'package:todo_flutter_sample/states/task/task_update_state.dart';
 
 class TaskEditPage extends StatefulWidget {
   static String routeName = '/task/edit';

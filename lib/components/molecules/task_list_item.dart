@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/helpers/filter.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/pages/task/detail_page.dart';
-import 'package:todo_flutter_sample/states/task_list_state.dart';
+import 'package:todo_flutter_sample/states/task/task_list_state.dart';
 
 class TaskListItem extends StatelessWidget {
   const TaskListItem(this.task);

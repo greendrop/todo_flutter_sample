@@ -7,7 +7,7 @@ import 'package:todo_flutter_sample/components/organisms/drawer_content.dart';
 import 'package:todo_flutter_sample/components/organisms/task_list_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
 import 'package:todo_flutter_sample/models/task.dart';
-import 'package:todo_flutter_sample/states/task_list_state.dart';
+import 'package:todo_flutter_sample/states/task/task_list_state.dart';
 
 import 'new_page.dart';
 

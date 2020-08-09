@@ -4,8 +4,8 @@ import 'package:todo_flutter_sample/components/atoms/center_circular_progress_in
 import 'package:todo_flutter_sample/helpers/filter.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/pages/task/edit_page.dart';
-import 'package:todo_flutter_sample/states/task_delete_state.dart';
-import 'package:todo_flutter_sample/states/task_detail_state.dart';
+import 'package:todo_flutter_sample/states/task/task_delete_state.dart';
+import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
 
 class TaskDetailBody extends StatefulWidget {
   @override

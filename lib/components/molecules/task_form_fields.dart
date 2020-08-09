@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/states/task_form_state.dart';
+import 'package:todo_flutter_sample/states/task/task_form_state.dart';
 
 class TaskFormFields extends StatefulWidget {
   @override

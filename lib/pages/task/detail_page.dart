@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/organisms/task_detail_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
-import 'package:todo_flutter_sample/states/task_delete_state.dart';
-import 'package:todo_flutter_sample/states/task_detail_state.dart';
+import 'package:todo_flutter_sample/states/task/task_delete_state.dart';
+import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
 
 class TaskDetailPage extends StatefulWidget {
   static String routeName = '/task/detail';

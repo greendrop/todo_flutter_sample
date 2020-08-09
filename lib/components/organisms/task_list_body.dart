@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_list_item.dart';
 import 'package:todo_flutter_sample/models/task.dart';
-import 'package:todo_flutter_sample/states/task_list_state.dart';
+import 'package:todo_flutter_sample/states/task/task_list_state.dart';
 
 class TaskListBody extends StatelessWidget {
   @override

@@ -4,9 +4,9 @@ import 'package:todo_flutter_sample/components/atoms/center_circular_progress_in
 import 'package:todo_flutter_sample/components/molecules/task_form_fields.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/states/task_detail_state.dart';
-import 'package:todo_flutter_sample/states/task_form_state.dart';
-import 'package:todo_flutter_sample/states/task_update_state.dart';
+import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
+import 'package:todo_flutter_sample/states/task/task_form_state.dart';
+import 'package:todo_flutter_sample/states/task/task_update_state.dart';
 
 class TaskEditBody extends StatefulWidget {
   @override

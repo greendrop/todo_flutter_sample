@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/organisms/task_new_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
-import 'package:todo_flutter_sample/states/task_create_state.dart';
-import 'package:todo_flutter_sample/states/task_form_state.dart';
+import 'package:todo_flutter_sample/states/task/task_create_state.dart';
+import 'package:todo_flutter_sample/states/task/task_form_state.dart';
 
 class TaskNewPage extends StatefulWidget {
   static String routeName = '/task/new';

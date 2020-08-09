@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_form_fields.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/states/task_create_state.dart';
-import 'package:todo_flutter_sample/states/task_form_state.dart';
+import 'package:todo_flutter_sample/states/task/task_create_state.dart';
+import 'package:todo_flutter_sample/states/task/task_form_state.dart';
 
 class TaskNewBody extends StatefulWidget {
   @override

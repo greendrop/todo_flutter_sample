@@ -9,12 +9,12 @@ import 'package:todo_flutter_sample/pages/task/edit_page.dart';
 import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/pages/task/new_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
-import 'package:todo_flutter_sample/states/task_create_state.dart';
-import 'package:todo_flutter_sample/states/task_delete_state.dart';
-import 'package:todo_flutter_sample/states/task_detail_state.dart';
-import 'package:todo_flutter_sample/states/task_form_state.dart';
-import 'package:todo_flutter_sample/states/task_list_state.dart';
-import 'package:todo_flutter_sample/states/task_update_state.dart';
+import 'package:todo_flutter_sample/states/task/task_create_state.dart';
+import 'package:todo_flutter_sample/states/task/task_delete_state.dart';
+import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
+import 'package:todo_flutter_sample/states/task/task_form_state.dart';
+import 'package:todo_flutter_sample/states/task/task_list_state.dart';
+import 'package:todo_flutter_sample/states/task/task_update_state.dart';
 
 class AppRoot extends StatelessWidget {
   @override
