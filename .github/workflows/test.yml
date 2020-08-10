@@ -1,0 +1,26 @@
+name: Test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: cirrusci/flutter:1.17.5
+      options: -u root
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: flutter pub get
+        run: |
+          flutter pub get
+
+      - name: flutter analyze
+        run: |
+          flutter analyze
+
+      - name: flutter test
+        run: |
+          flutter test
