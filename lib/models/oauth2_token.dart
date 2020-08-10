@@ -7,6 +7,10 @@ part 'oauth2_token.g.dart';
 class OAuth2Token {
   OAuth2Token();
 
+  factory OAuth2Token.fromJson(Map<String, dynamic> json) =>
+      _$OAuth2TokenFromJson(json);
+  Map<String, dynamic> toJson() => _$OAuth2TokenToJson(this);
+
   @JsonKey(name: 'access_token')
   String accessToken;
   @JsonKey(name: 'refresh_token')
@@ -16,27 +20,21 @@ class OAuth2Token {
   @JsonKey(name: 'expires_at')
   DateTime expiresAt;
 
-  // ignore: sort_constructors_first
-  factory OAuth2Token.fromJson(Map<String, dynamic> json) =>
-      _$OAuth2TokenFromJson(json);
-  Map<String, dynamic> toJson() => _$OAuth2TokenToJson(this);
-
   bool isValidToken() {
-    return accessToken != '' &&
+    return (accessToken ?? '') != '' &&
         expiresAt != null &&
-        expiresAt.compareTo(DateTime.now()) >= 0;
+        expiresAt.isAfter(DateTime.now());
   }
 
   bool isSignedIn(User user) {
-    return isValidToken() && user != null && user.id != 0;
+    return isValidToken() && (user?.id ?? 0) != 0;
   }
 
   bool isNeedRefresh() {
-    if (expiresAt == null) {
+    if ((refreshToken ?? '') == '' || expiresAt == null) {
       return false;
     }
 
-    final date = expiresAt.add(const Duration(hours: -1));
-    return date.compareTo(DateTime.now()) < 0;
+    return expiresAt.isAfter(DateTime.now().add(const Duration(hours: -1)));
   }
 }
