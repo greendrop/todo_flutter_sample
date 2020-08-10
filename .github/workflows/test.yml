@@ -8,6 +8,7 @@ jobs:
 
     container:
       image: cirrusci/flutter:1.17.5
+      options: -u root
 
     steps:
       - uses: actions/checkout@v1
