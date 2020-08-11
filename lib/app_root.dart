@@ -62,29 +62,6 @@ class AppRootProvider extends StatelessWidget {
   }
 }
 
-/*
-class AppRootMain extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'ToDo Flutter Sample',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: HomePage.routeName,
-        routes: <String, WidgetBuilder>{
-          HomePage.routeName: (BuildContext context) => HomePage(),
-          SignInPage.routeName: (BuildContext context) => SignInPage(),
-          TaskListPage.routeName: (BuildContext context) => TaskListPage(),
-          TaskDetailPage.routeName: (BuildContext context) => TaskDetailPage(),
-          TaskNewPage.routeName: (BuildContext context) => TaskNewPage(),
-          TaskEditPage.routeName: (BuildContext context) => TaskEditPage(),
-        });
-  }
-}
- */
-
 class AppRootMain extends StatefulWidget {
   @override
   _AppRootMainState createState() => _AppRootMainState();

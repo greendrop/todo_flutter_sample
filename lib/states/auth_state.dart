@@ -44,9 +44,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
 
   Future<void> initializeToken() async {
     final token = await _prefs.then((prefs) {
-      final tokenJson =
-          json.decode(prefs.getString('authToken')) as Map<String, dynamic>;
-      return OAuth2Token.fromJson(tokenJson);
+      final authTokenString = prefs.getString('authToken') ?? '';
+      if (authTokenString != '') {
+        final tokenJson = json.decode(authTokenString) as Map<String, dynamic>;
+        return OAuth2Token.fromJson(tokenJson);
+      } else {
+        return null;
+      }
     });
     state = state.copyWith(token: token);
     if (token.isNeedRefresh()) {
@@ -56,21 +60,27 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
 
   Future<void> initializeUser() async {
     final user = await _prefs.then((prefs) {
-      final userJson =
-          json.decode(prefs.getString('authUser')) as Map<String, dynamic>;
-      return User.fromJson(userJson);
+      final authUserString = prefs.getString('authUser') ?? '';
+      if (authUserString != '') {
+        final userJson = json.decode(authUserString) as Map<String, dynamic>;
+        return User.fromJson(userJson);
+      } else {
+        return null;
+      }
     });
     state = state.copyWith(user: user);
   }
 
   Future<bool> setTokenToPrefs(OAuth2Token token) async {
     final prefs = await _prefs;
-    return prefs.setString('authToken', json.encode(token.toJson()));
+    return prefs.setString(
+        'authToken', token == null ? '' : json.encode(token.toJson()));
   }
 
   Future<bool> setUserToPrefs(User user) async {
     final prefs = await _prefs;
-    return prefs.setString('authUser', json.encode(user.toJson()));
+    return prefs.setString(
+        'authUser', user == null ? '' : json.encode(user.toJson()));
   }
 
   AuthState setToken(OAuth2Token token) {
