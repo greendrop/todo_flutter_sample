@@ -67,6 +67,6 @@ class _NewFloatingActionButton extends StatelessWidget {
           });
         },
         tooltip: 'Create',
-        child: Icon(Icons.add));
+        child: const Icon(Icons.add));
   }
 }

@@ -14,7 +14,7 @@ class DrawerContent extends StatelessWidget {
         context.select<AuthState, OAuth2Token>((state) => state.token);
     final user = context.select<AuthState, User>((state) => state.user);
     final children = <Widget>[
-      DrawerHeader(
+      const DrawerHeader(
         child: Center(
           child: Text(
             'ToDo Flutter Sample',
