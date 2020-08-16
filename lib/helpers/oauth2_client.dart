@@ -55,6 +55,18 @@ class OAuth2Client {
     return http.post(oauth2AccessTokenUrl, body: params);
   }
 
+  Future<http.Response> getAccessTokenByUsernameAndPassword(
+      String username, String password) {
+    final params = {
+      'grant_type': 'password',
+      'username': username,
+      'password': password,
+      'client_id': oauth2ClientId,
+      'client_secret': oauth2ClientSecret,
+    };
+    return http.post(oauth2AccessTokenUrl, body: params);
+  }
+
   Future<http.Response> getAccessTokenByRefreshToken(String refreshToken) {
     final params = {
       'grant_type': 'refresh_token',

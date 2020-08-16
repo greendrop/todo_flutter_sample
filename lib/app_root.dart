@@ -6,11 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
+import 'package:todo_flutter_sample/pages/sign_in_web_view_page.dart';
 import 'package:todo_flutter_sample/pages/task/detail_page.dart';
 import 'package:todo_flutter_sample/pages/task/edit_page.dart';
 import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/pages/task/new_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/sign_in_form_state.dart';
 import 'package:todo_flutter_sample/states/task/task_create_state.dart';
 import 'package:todo_flutter_sample/states/task/task_delete_state.dart';
 import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
@@ -44,6 +46,8 @@ class AppRootProvider extends StatelessWidget {
       providers: [
         StateNotifierProvider<AuthStateNotifier, AuthState>(
             create: (_) => AuthStateNotifier()),
+        StateNotifierProvider<SignInFormStateNotifier, SignInFormState>(
+            create: (_) => SignInFormStateNotifier()),
         StateNotifierProvider<TaskListStateNotifier, TaskListState>(
             create: (_) => TaskListStateNotifier()),
         StateNotifierProvider<TaskDetailStateNotifier, TaskDetailState>(
@@ -98,6 +102,8 @@ class _AppRootMainState extends State<AppRootMain> {
         routes: <String, WidgetBuilder>{
           HomePage.routeName: (BuildContext context) => HomePage(),
           SignInPage.routeName: (BuildContext context) => SignInPage(),
+          SignInWebViewPage.routeName: (BuildContext context) =>
+              SignInWebViewPage(),
           TaskListPage.routeName: (BuildContext context) => TaskListPage(),
           TaskDetailPage.routeName: (BuildContext context) => TaskDetailPage(),
           TaskNewPage.routeName: (BuildContext context) => TaskNewPage(),
