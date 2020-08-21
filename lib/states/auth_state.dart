@@ -187,6 +187,63 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
     return completer.future;
   }
 
+  Future<AuthState> fetchTokenAndUserByUsernameAndCode(
+      String username, String password) async {
+    final completer = Completer<AuthState>();
+
+    setIsFetching(true);
+    setIsUnauthorized(false);
+    setIsError(false);
+    setErrorStatusCode(0);
+    setErrorBody('');
+
+    final oauth2Client = OAuth2Client();
+    final accessTokenResponse = await oauth2Client
+        .getAccessTokenByUsernameAndPassword(username, password);
+
+    if (accessTokenResponse.statusCode >= 200 &&
+        accessTokenResponse.statusCode < 300) {
+      final body =
+          json.decode(accessTokenResponse.body) as Map<String, dynamic>;
+      body['expires_at'] = DateTime.fromMicrosecondsSinceEpoch(
+              ((body['created_at'] as int) + (body['expires_in'] as int)) *
+                  1000000)
+          .toIso8601String();
+      body['created_at'] = DateTime.fromMicrosecondsSinceEpoch(
+              (body['created_at'] as int) * 1000000)
+          .toIso8601String();
+      final fetchedToken = OAuth2Token.fromJson(body);
+
+      final userRepository = UserRepository()
+        ..headerAuthorization = 'Bearer ${fetchedToken.accessToken}';
+
+      final userResponse = await userRepository.getMe();
+
+      if (userResponse.statusCode >= 200 && userResponse.statusCode < 300) {
+        final body = json.decode(userResponse.body) as Map<String, dynamic>;
+        setToken(fetchedToken);
+        setUser(User.fromJson(body));
+      } else {
+        setIsError(true);
+        setErrorStatusCode(userResponse.statusCode);
+        setErrorBody(userResponse.body);
+        if (userResponse.statusCode == 401) {
+          setIsUnauthorized(true);
+        }
+      }
+    } else {
+      setIsError(true);
+      setErrorStatusCode(accessTokenResponse.statusCode);
+      setErrorBody(accessTokenResponse.body);
+      if (accessTokenResponse.statusCode == 401) {
+        setIsUnauthorized(true);
+      }
+    }
+    setIsFetching(false);
+    completer.complete(state);
+    return completer.future;
+  }
+
   Future<AuthState> fetchTokenByRefreshToken(String refreshToken) async {
     final completer = Completer<AuthState>();
 

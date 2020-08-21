@@ -4,6 +4,7 @@ import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/user.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
+import 'package:todo_flutter_sample/pages/sign_in_web_view_page.dart';
 import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 
@@ -57,6 +58,13 @@ class DrawerContent extends StatelessWidget {
           title: const Text('Sign in'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(SignInPage.routeName);
+          },
+        ),
+        ListTile(
+          title: const Text('Sign in(WebView)'),
+          onTap: () {
+            Navigator.of(context)
+                .pushReplacementNamed(SignInWebViewPage.routeName);
           },
         )
       ]);
