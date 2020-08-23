@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_form_fields.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
 import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
@@ -15,6 +17,7 @@ class TaskEditBody extends StatefulWidget {
 
 class _TaskEditBodyState extends State<TaskEditBody> {
   final _formKey = GlobalKey<FormState>();
+  final _appConfig = AppConfig();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,13 @@ class _TaskEditBodyState extends State<TaskEditBody> {
                                   .read<TaskUpdateStateNotifier>()
                                   .updateTask(task.id, taskForm);
                               if (!taskUpdateState.isError) {
-                                Navigator.of(context).pop('Updated Task.');
+                                Navigator.of(context).pop();
+                                await Fluttertoast.showToast(
+                                  msg: 'Updated Task.',
+                                  backgroundColor:
+                                      _appConfig.toastBackgroundColor,
+                                  textColor: _appConfig.toastTextColor,
+                                );
                               }
                             }
                           },

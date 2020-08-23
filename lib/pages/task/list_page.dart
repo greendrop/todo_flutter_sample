@@ -59,11 +59,6 @@ class _NewFloatingActionButton extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pushNamed(TaskNewPage.routeName).then((value) {
             context.read<TaskListStateNotifier>().fetchTasks({});
-            if (value is String && (value ?? '') != '') {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text(value),
-              ));
-            }
           });
         },
         tooltip: 'Create',

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/organisms/drawer_content.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/helpers/oauth2_client.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
@@ -10,6 +12,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class SignInWebViewPage extends StatelessWidget {
   static String routeName = '/sign_in_web_view';
+  final _appConfig = AppConfig();
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,11 @@ class SignInWebViewPage extends StatelessWidget {
                       .fetchTokenAndUserByCode(code);
 
                   if (!authState.isError) {
+                    await Fluttertoast.showToast(
+                      msg: 'Signed in.',
+                      backgroundColor: _appConfig.toastBackgroundColor,
+                      textColor: _appConfig.toastTextColor,
+                    );
                     await Navigator.of(context)
                         .pushReplacementNamed(HomePage.routeName);
                   }
