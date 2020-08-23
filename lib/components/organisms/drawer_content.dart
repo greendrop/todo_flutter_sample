@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/user.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
@@ -9,6 +11,8 @@ import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 
 class DrawerContent extends StatelessWidget {
+  final _appConfig = AppConfig();
+
   @override
   Widget build(BuildContext context) {
     final token =
@@ -48,6 +52,11 @@ class DrawerContent extends StatelessWidget {
           title: const Text('Sign out'),
           onTap: () {
             context.read<AuthStateNotifier>().signOut();
+            Fluttertoast.showToast(
+              msg: 'Signed out.',
+              backgroundColor: _appConfig.toastBackgroundColor,
+              textColor: _appConfig.toastTextColor,
+            );
             Navigator.of(context).pushReplacementNamed(HomePage.routeName);
           },
         )

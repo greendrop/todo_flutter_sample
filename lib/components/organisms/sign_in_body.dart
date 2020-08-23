@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/sign_in_form_fields.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/sign_in_form.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
@@ -13,6 +15,7 @@ class SignInBody extends StatefulWidget {
 }
 
 class _SignInBodyState extends State<SignInBody> {
+  final _appConfig = AppConfig();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -47,6 +50,12 @@ class _SignInBodyState extends State<SignInBody> {
                                       signInForm.email, signInForm.password);
 
                               if (!authState.isError) {
+                                await Fluttertoast.showToast(
+                                  msg: 'Signed in.',
+                                  backgroundColor:
+                                      _appConfig.toastBackgroundColor,
+                                  textColor: _appConfig.toastTextColor,
+                                );
                                 await Navigator.of(context)
                                     .pushReplacementNamed(HomePage.routeName);
                               }

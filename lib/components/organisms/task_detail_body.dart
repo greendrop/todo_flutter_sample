@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/helpers/filter.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/pages/task/edit_page.dart';
@@ -13,6 +15,7 @@ class TaskDetailBody extends StatefulWidget {
 }
 
 class _TaskDetailBodyState extends State<TaskDetailBody> {
+  final _appConfig = AppConfig();
   final _formKey = GlobalKey<FormState>();
   final _titleTextEditingController = TextEditingController();
   final _descriptionTextEditingController = TextEditingController();
@@ -113,11 +116,6 @@ class _TaskDetailBodyState extends State<TaskDetailBody> {
                               context
                                   .read<TaskDetailStateNotifier>()
                                   .fetchTaskById(task.id);
-                              if (value is String && (value ?? '') != '') {
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text(value),
-                                ));
-                              }
                             });
                           },
                           child: const Text('EDIT'),
@@ -132,7 +130,13 @@ class _TaskDetailBodyState extends State<TaskDetailBody> {
                                     .read<TaskDeleteStateNotifier>()
                                     .deleteTask(task.id);
                                 if (!taskDeleteState.isError) {
-                                  Navigator.of(context).pop('Deleted Task.');
+                                  Navigator.of(context).pop();
+                                  await Fluttertoast.showToast(
+                                    msg: 'Deleted Task.',
+                                    backgroundColor:
+                                        _appConfig.toastBackgroundColor,
+                                    textColor: _appConfig.toastTextColor,
+                                  );
                                 }
                               }
                             },
