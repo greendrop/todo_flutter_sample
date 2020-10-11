@@ -1,0 +1,278 @@
+openapi: 3.0.0
+
+info:
+  version: 0.0.0
+  title: Todo API
+
+servers:
+  - url: http://localhost:3000
+    description: Local
+
+tags:
+  - name: users
+  - name: tasks
+
+paths:
+  /api/v1/me:
+    get:
+      tags:
+        - users
+      summary: ログインユーザー情報を取得
+      security:
+        - oauth2: [public]
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSchema"
+        401:
+          $ref: "#/components/responses/401"
+        500:
+          $ref: "#/components/responses/500"
+  /api/v1/tasks:
+    get:
+      tags:
+        - tasks
+      summary: タスク一覧を取得
+      security:
+        - oauth2: [public]
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: per_page
+          required: false
+          schema:
+            type: number
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TaskSchema"
+                  paging:
+                    $ref: "#/components/schemas/PagingSchema"
+                required:
+                  - data
+                  - paging
+        401:
+          $ref: "#/components/responses/401"
+        500:
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+        - tasks
+      summary: タスクを登録
+      security:
+        - oauth2: [public]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateSchema"
+      responses:
+        201:
+          $ref: "#/components/responses/201"
+        401:
+          $ref: "#/components/responses/401"
+        500:
+          $ref: "#/components/responses/500"
+  /api/v1/tasks/{id}:
+    get:
+      tags:
+        - tasks
+      summary: タスクを取得
+      security:
+        - oauth2: [public]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskSchema"
+        401:
+          $ref: "#/components/responses/401"
+        500:
+          $ref: "#/components/responses/500"
+    patch:
+      tags:
+        - tasks
+      summary: タスクを更新
+      security:
+        - oauth2: [public]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdateSchema"
+      responses:
+        204:
+          $ref: "#/components/responses/204"
+    delete:
+      tags:
+        - tasks
+      summary: タスクを削除
+      security:
+        - oauth2: [public]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        204:
+          $ref: "#/components/responses/204"
+
+components:
+  responses:
+    200:
+      description: OK
+    201:
+      description: Created
+    204:
+      description: No Content
+    400:
+      description: Bad Request
+    401:
+      description: Unauthorized
+    402:
+      description: Payment Required
+    403:
+      description: Forbidden
+    404:
+      description: Not Found
+    500:
+      description: Internal Server Error
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: /auth/oauth/authorize
+          tokenUrl: /auth/oauth/token
+          refreshUrl: /auth/oauth/token
+          scopes:
+            public:
+  schemas:
+    PagingSchema:
+      type: object
+      properties:
+        total_count:
+          type: number
+          nullable: false
+        limit_value:
+          type: number
+          nullable: false
+        total_pages:
+          type: number
+          nullable: false
+        current_page:
+          type: number
+          nullable: false
+    UserSchema:
+      type: object
+      properties:
+        id:
+          type: number
+          nullable: false
+        email:
+          type: string
+          nullable: false
+        created_at:
+          type: string
+          format: date-time
+          nullable: false
+        updated_at:
+          type: string
+          format: date-time
+          nullable: false
+      required:
+        - id
+        - email
+        - created_at
+        - updated_at
+    TaskSchema:
+      type: object
+      properties:
+        id:
+          type: number
+          nullable: false
+        title:
+          type: string
+          nullable: false
+        description:
+          type: string
+          nullable: true
+        done:
+          type: boolean
+          nullable: false
+        created_at:
+          type: string
+          format: date-time
+          nullable: false
+        updated_at:
+          type: string
+          format: date-time
+          nullable: false
+      required:
+        - id
+        - title
+        - description
+        - done
+        - created_at
+        - updated_at
+    TaskFormSchema:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: false
+        description:
+          type: string
+          nullable: true
+        done:
+          type: boolean
+          nullable: false
+      required:
+        - title
+        - description
+        - done
+    TaskCreateSchema:
+      type: object
+      properties:
+        task:
+          $ref: "#/components/schemas/TaskFormSchema"
+      required:
+        - task
+    TaskUpdateSchema:
+      type: object
+      properties:
+        task:
+          $ref: "#/components/schemas/TaskFormSchema"
+      required:
+        - task

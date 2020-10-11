@@ -3,12 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:state_notifier/state_notifier.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/helpers/oauth2_client.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/user.dart';
-import 'package:todo_flutter_sample/repositories/user_repository.dart';
 
 part 'auth_state.freezed.dart';
 part 'auth_state.g.dart';
@@ -157,20 +158,21 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
           .toIso8601String();
       final fetchedToken = OAuth2Token.fromJson(body);
 
-      final userRepository = UserRepository()
-        ..headerAuthorization = 'Bearer ${fetchedToken.accessToken}';
+      final appConfig = AppConfig();
+      final apiClient =
+          openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+      apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+          fetchedToken.accessToken;
+      final usersApi = openapi.UsersApi(apiClient);
 
-      final userResponse = await userRepository.getMe();
-
-      if (userResponse.statusCode >= 200 && userResponse.statusCode < 300) {
-        final body = json.decode(userResponse.body) as Map<String, dynamic>;
-        setToken(fetchedToken);
-        setUser(User.fromJson(body));
-      } else {
+      try {
+        final response = await usersApi.apiV1MeGet();
+        setUser(User.fromJson(response.toJson()));
+      } on openapi.ApiException catch (error) {
         setIsError(true);
-        setErrorStatusCode(userResponse.statusCode);
-        setErrorBody(userResponse.body);
-        if (userResponse.statusCode == 401) {
+        setErrorStatusCode(error.code);
+        setErrorBody(error.message);
+        if (error.code == 401) {
           setIsUnauthorized(true);
         }
       }
@@ -214,20 +216,21 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
           .toIso8601String();
       final fetchedToken = OAuth2Token.fromJson(body);
 
-      final userRepository = UserRepository()
-        ..headerAuthorization = 'Bearer ${fetchedToken.accessToken}';
+      final appConfig = AppConfig();
+      final apiClient =
+          openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+      apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+          fetchedToken.accessToken;
+      final usersApi = openapi.UsersApi(apiClient);
 
-      final userResponse = await userRepository.getMe();
-
-      if (userResponse.statusCode >= 200 && userResponse.statusCode < 300) {
-        final body = json.decode(userResponse.body) as Map<String, dynamic>;
-        setToken(fetchedToken);
-        setUser(User.fromJson(body));
-      } else {
+      try {
+        final response = await usersApi.apiV1MeGet();
+        setUser(User.fromJson(response.toJson()));
+      } on openapi.ApiException catch (error) {
         setIsError(true);
-        setErrorStatusCode(userResponse.statusCode);
-        setErrorBody(userResponse.body);
-        if (userResponse.statusCode == 401) {
+        setErrorStatusCode(error.code);
+        setErrorBody(error.message);
+        if (error.code == 401) {
           setIsUnauthorized(true);
         }
       }

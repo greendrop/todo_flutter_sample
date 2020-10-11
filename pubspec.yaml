@@ -40,6 +40,9 @@ dependencies:
   shared_preferences: ^0.5.8
   fluttertoast: ^7.0.2
 
+  openapi:
+    path: ./openapi/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

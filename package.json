@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "generate-api-client": "openapi-generator generate -g dart --additional-properties=browserClient=false,pubName=openapi -i docs/api/schema.yml -o openapi"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1"
+  }
+}
