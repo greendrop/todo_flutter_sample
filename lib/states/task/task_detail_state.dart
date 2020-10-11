@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:state_notifier/state_notifier.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/models/user.dart';
-import 'package:todo_flutter_sample/repositories/task_repository.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 
 part 'task_detail_state.freezed.dart';
@@ -86,19 +86,22 @@ class TaskDetailStateNotifier extends StateNotifier<TaskDetailState>
     setIsFetching(true);
     setIsError(false);
 
-    final taskRepository = TaskRepository()
-      ..headerAuthorization = 'Bearer ${state.authToken.accessToken}';
+    final appConfig = AppConfig();
+    final apiClient =
+        openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+        state.authToken.accessToken;
+    final tasksApi = openapi.TasksApi(apiClient);
 
-    final response = await taskRepository.get(id);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final body = json.decode(response.body) as Map<String, dynamic>;
-      setTask(Task.fromJson(body));
-    } else {
+    try {
+      final response = await tasksApi.apiV1TasksIdGet(id);
+      setTask(Task.fromJson(response.toJson()));
+    } on openapi.ApiException catch (error) {
       setIsError(true);
-      setErrorStatusCode(response.statusCode);
-      setErrorBody(response.body);
+      setErrorStatusCode(error.code);
+      setErrorBody(error.message);
     }
+
     setIsFetching(false);
     completer.complete(state);
     return completer.future;

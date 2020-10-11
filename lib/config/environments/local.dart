@@ -6,21 +6,21 @@ class EnvConfigLocal implements EnvConfig {
   @override
   bool displayEnv = true;
   @override
-  String oauth2ClientId = 'DMm8fycO6BrIXzfxp0TE5qc1NAqBIuYRcOcAK1mg-ME';
+  String oauth2ClientId = '4d0C6xSO0NmWuweCKaQhQudRLnrN8HC9YF5r_Hfrsrk';
   @override
-  String oauth2ClientSecret = 'l87sHB3rrXzZe7iRT00tfP5z2y2nzfOZG-Q-mqZRfcA';
+  String oauth2ClientSecret = 'Hd5UbDJ63eztGJgn79v8O8H2GjVS1hEI3fg0wdl7OVk';
   @override
   String oauth2AccessTokenUrl =
-      'https://todo-api-rails-sample.dev.sysgreenplus.net/auth/oauth/token';
+      'http://todo-api-rails-sample.dev.sysgreenplus.net/auth/oauth/token';
   @override
   String oauth2AuthorizationUrl =
-      'https://todo-api-rails-sample.dev.sysgreenplus.net/auth/oauth/authorize';
+      'http://todo-api-rails-sample.dev.sysgreenplus.net/auth/oauth/authorize';
   @override
   String oauth2RedirectUrl =
       'https://todo-api-rails-sample.dev.sysgreenplus.net/';
   @override
   String oauth2UserInfoUrl =
-      'https://todo-api-rails-sample.dev.sysgreenplus.net/api/v1/me';
+      'http://todo-api-rails-sample.dev.sysgreenplus.net/api/v1/me';
   @override
-  String apiBaseUrl = 'https://todo-api-rails-sample.dev.sysgreenplus.net/api';
+  String apiBaseUrl = 'http://todo-api-rails-sample.dev.sysgreenplus.net';
 }

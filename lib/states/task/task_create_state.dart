@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:state_notifier/state_notifier.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
 import 'package:todo_flutter_sample/models/user.dart';
-import 'package:todo_flutter_sample/repositories/task_repository.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 
 part 'task_create_state.freezed.dart';
@@ -78,16 +79,25 @@ class TaskCreateStateNotifier extends StateNotifier<TaskCreateState>
     setIsCreating(true);
     setIsError(false);
 
-    final taskRepository = TaskRepository()
-      ..headerAuthorization = 'Bearer ${state.authToken.accessToken}';
+    final appConfig = AppConfig();
+    final apiClient =
+        openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+        state.authToken.accessToken;
+    final tasksApi = openapi.TasksApi(apiClient);
+    final taskFormSchema = openapi.TaskFormSchema()
+      ..title = taskForm.title
+      ..description = taskForm.description
+      ..done = taskForm.done;
+    final taskCreateSchema = openapi.TaskCreateSchema()..task = taskFormSchema;
 
-    final response = await taskRepository.create(taskForm);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-    } else {
+    try {
+      await tasksApi.apiV1TasksPost(taskCreateSchema: taskCreateSchema);
+    } on openapi.ApiException catch (error) {
+      print(error);
       setIsError(true);
-      setErrorStatusCode(response.statusCode);
-      setErrorBody(response.body);
+      setErrorStatusCode(error.code);
+      setErrorBody(error.message);
     }
 
     setIsCreating(false);

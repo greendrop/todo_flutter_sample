@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:state_notifier/state_notifier.dart';
+import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/models/user.dart';
-import 'package:todo_flutter_sample/repositories/task_repository.dart';
 import 'package:todo_flutter_sample/states/auth_state.dart';
 
 part 'task_list_state.freezed.dart';
@@ -117,38 +117,28 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
     setIsFetching(true);
     setIsError(false);
 
-    if (queryParameters['per_page'] == null) {
-      queryParameters['per_page'] = _taskListPerPage.toString();
-    }
+    final appConfig = AppConfig();
+    final apiClient =
+        openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+        state.authToken.accessToken;
+    final tasksApi = openapi.TasksApi(apiClient);
 
-    final taskRepository = TaskRepository()
-      ..headerAuthorization = 'Bearer ${state.authToken.accessToken}';
-
-    final response = await taskRepository.getList(queryParameters);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final body = json.decode(response.body) as List<dynamic>;
-      setTasks(body
-          .map((dynamic item) => Task.fromJson(item as Map<String, dynamic>))
-          .toList());
-      var resPage = 1;
-      var resPerPage = _taskListPerPage;
-      if (queryParameters['page'] != null) {
-        resPage = int.parse(queryParameters['page']);
-      }
-      if (queryParameters['per_page'] != null) {
-        resPerPage = int.parse(queryParameters['per_page']);
-      }
-      final resTotalCount = int.parse(response.headers['total-count']);
-      setPage(resPage);
-      setPerPage(resPerPage);
-      setTotalCount(resTotalCount);
-      setMaxPage(resTotalCount == 0 ? 1 : (resTotalCount / resPerPage).ceil());
-    } else {
+    try {
+      final response =
+          await tasksApi.apiV1TasksGet(page: 1, perPage: _taskListPerPage);
+      setTasks(
+          response.data.map((item) => Task.fromJson(item.toJson())).toList());
+      setPage(response.paging.currentPage.toInt());
+      setPerPage(response.paging.limitValue.toInt());
+      setTotalCount(response.paging.totalCount.toInt());
+      setMaxPage(response.paging.totalPages.toInt());
+    } on openapi.ApiException catch (error) {
       setIsError(true);
-      setErrorStatusCode(response.statusCode);
-      setErrorBody(response.body);
+      setErrorStatusCode(error.code);
+      setErrorBody(error.message);
     }
+
     setIsFetching(false);
     completer.complete(state);
     return completer.future;
@@ -157,40 +147,34 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
   Future<TaskListState> fetchAdditionalTasks(
       Map<String, String> queryParameters) async {
     final completer = Completer<TaskListState>();
+    final page = state.page + 1;
+    final perPage = state.perPage;
 
     setIsFetching(true);
     setIsError(false);
 
-    queryParameters['page'] = (state.page + 1).toString();
-    queryParameters['per_page'] = state.perPage.toString();
+    final appConfig = AppConfig();
+    final apiClient =
+        openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+        state.authToken.accessToken;
+    final tasksApi = openapi.TasksApi(apiClient);
 
-    final taskRepository = TaskRepository()
-      ..headerAuthorization = 'Bearer ${state.authToken.accessToken}';
-
-    final response = await taskRepository.getList(queryParameters);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final body = json.decode(response.body) as List<dynamic>;
-      final additionalTasks = body
-          .map((dynamic item) => Task.fromJson(item as Map<String, dynamic>))
-          .toList();
-      final tasks = [
-        ...state.tasks,
-        ...additionalTasks,
-      ];
-      setTasks(tasks);
-      final resPage = int.parse(queryParameters['page']);
-      final resPerPage = int.parse(queryParameters['per_page']);
-      final resTotalCount = int.parse(response.headers['total-count']);
-      setPage(resPage);
-      setPerPage(resPerPage);
-      setTotalCount(resTotalCount);
-      setMaxPage(resTotalCount == 0 ? 1 : (resTotalCount / resPerPage).ceil());
-    } else {
+    try {
+      final response =
+          await tasksApi.apiV1TasksGet(page: page, perPage: perPage);
+      setTasks(
+          response.data.map((item) => Task.fromJson(item.toJson())).toList());
+      setPage(response.paging.currentPage.toInt());
+      setPerPage(response.paging.limitValue.toInt());
+      setTotalCount(response.paging.totalCount.toInt());
+      setMaxPage(response.paging.totalPages.toInt());
+    } on openapi.ApiException catch (error) {
       setIsError(true);
-      setErrorStatusCode(response.statusCode);
-      setErrorBody(response.body);
+      setErrorStatusCode(error.code);
+      setErrorBody(error.message);
     }
+
     setIsFetching(false);
     completer.complete(state);
     return completer.future;
