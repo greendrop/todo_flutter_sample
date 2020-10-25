@@ -14,19 +14,19 @@ void main() {
       });
 
       test('when accessToken is null', () {
-        final oauth2Token = OAuth2Token(accessToken: null);
+        const oauth2Token = OAuth2Token(accessToken: null);
         final actual = oauth2Token.isValidToken();
         expect(actual, equals(false));
       });
 
       test('when accessToken is blank', () {
-        final oauth2Token = OAuth2Token(accessToken: '');
+        const oauth2Token = OAuth2Token(accessToken: '');
         final actual = oauth2Token.isValidToken();
         expect(actual, equals(false));
       });
 
       test('when expiresAt is null', () {
-        final oauth2Token =
+        const oauth2Token =
             OAuth2Token(accessToken: 'access_token', expiresAt: null);
         final actual = oauth2Token.isValidToken();
         expect(actual, equals(false));
@@ -46,14 +46,14 @@ void main() {
         final oauth2Token = OAuth2Token(
             accessToken: 'access_token',
             expiresAt: DateTime.now().add(const Duration(minutes: 1)));
-        final user = User(id: 1);
+        const user = User(id: 1);
         final actual = oauth2Token.isSignedIn(user);
         expect(actual, equals(true));
       });
 
       test('when isValidToken is false', () {
-        final oauth2Token = OAuth2Token(accessToken: '');
-        final user = User(id: 1);
+        const oauth2Token = OAuth2Token(accessToken: '');
+        const user = User(id: 1);
         final actual = oauth2Token.isSignedIn(user);
         expect(actual, equals(false));
       });
@@ -62,7 +62,7 @@ void main() {
         final oauth2Token = OAuth2Token(
             accessToken: 'access_token',
             expiresAt: DateTime.now().add(const Duration(minutes: 1)));
-        final user = User(id: 0);
+        const user = User(id: 0);
         final actual = oauth2Token.isSignedIn(user);
         expect(actual, equals(false));
       });
