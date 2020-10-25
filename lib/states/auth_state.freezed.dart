@@ -67,6 +67,9 @@ abstract class $AuthStateCopyWith<$Res> {
       int errorStatusCode,
       String errorBody,
       bool isRefreshFetching});
+
+  $OAuth2TokenCopyWith<$Res> get token;
+  $UserCopyWith<$Res> get user;
 }
 
 class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
@@ -105,6 +108,26 @@ class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
           : isRefreshFetching as bool,
     ));
   }
+
+  @override
+  $OAuth2TokenCopyWith<$Res> get token {
+    if (_value.token == null) {
+      return null;
+    }
+    return $OAuth2TokenCopyWith<$Res>(_value.token, (value) {
+      return _then(_value.copyWith(token: value));
+    });
+  }
+
+  @override
+  $UserCopyWith<$Res> get user {
+    if (_value.user == null) {
+      return null;
+    }
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
 }
 
 abstract class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
@@ -121,6 +144,11 @@ abstract class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
       int errorStatusCode,
       String errorBody,
       bool isRefreshFetching});
+
+  @override
+  $OAuth2TokenCopyWith<$Res> get token;
+  @override
+  $UserCopyWith<$Res> get user;
 }
 
 class __$AuthStateCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>

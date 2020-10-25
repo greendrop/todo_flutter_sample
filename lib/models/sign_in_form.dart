@@ -1,20 +1,17 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'sign_in_form.freezed.dart';
 part 'sign_in_form.g.dart';
 
-@JsonSerializable()
-class SignInForm {
-  SignInForm();
-
-  @JsonKey(name: 'email')
-  String email;
-  @JsonKey(name: 'password')
-  String password;
-
-  // ignore: sort_constructors_first
-  factory SignInForm.fromJson(Map<String, dynamic> json) =>
-      _$SignInFormFromJson(json);
-  Map<String, dynamic> toJson() => _$SignInFormToJson(this);
+@freezed
+abstract class SignInForm with _$SignInForm {
+  const factory SignInForm({
+    @JsonKey(name: 'email') String email,
+    @JsonKey(name: 'password') String password,
+  }) = _SignInForm;
+  factory SignInForm.fromJson(Map<String, dynamic> json) {
+    return _$SignInFormFromJson(json);
+  }
 
   static String emailValidator(String value) {
     if (value.isEmpty) {

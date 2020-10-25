@@ -17,15 +17,11 @@ class _$TaskUpdateStateTearOff {
 
 // ignore: unused_element
   _TaskUpdateState call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isUpdating = false,
+      {bool isUpdating = false,
       bool isError = false,
       int errorStatusCode = 0,
       String errorBody = ''}) {
     return _TaskUpdateState(
-      authToken: authToken,
-      authUser: authUser,
       isUpdating: isUpdating,
       isError: isError,
       errorStatusCode: errorStatusCode,
@@ -38,8 +34,6 @@ class _$TaskUpdateStateTearOff {
 const $TaskUpdateState = _$TaskUpdateStateTearOff();
 
 mixin _$TaskUpdateState {
-  OAuth2Token get authToken;
-  User get authUser;
   bool get isUpdating;
   bool get isError;
   int get errorStatusCode;
@@ -54,12 +48,7 @@ abstract class $TaskUpdateStateCopyWith<$Res> {
           TaskUpdateState value, $Res Function(TaskUpdateState) then) =
       _$TaskUpdateStateCopyWithImpl<$Res>;
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isUpdating,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      {bool isUpdating, bool isError, int errorStatusCode, String errorBody});
 }
 
 class _$TaskUpdateStateCopyWithImpl<$Res>
@@ -72,17 +61,12 @@ class _$TaskUpdateStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object isUpdating = freezed,
     Object isError = freezed,
     Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       isUpdating:
           isUpdating == freezed ? _value.isUpdating : isUpdating as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
@@ -101,12 +85,7 @@ abstract class _$TaskUpdateStateCopyWith<$Res>
       __$TaskUpdateStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isUpdating,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      {bool isUpdating, bool isError, int errorStatusCode, String errorBody});
 }
 
 class __$TaskUpdateStateCopyWithImpl<$Res>
@@ -121,17 +100,12 @@ class __$TaskUpdateStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object isUpdating = freezed,
     Object isError = freezed,
     Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_TaskUpdateState(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       isUpdating:
           isUpdating == freezed ? _value.isUpdating : isUpdating as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
@@ -146,9 +120,7 @@ class __$TaskUpdateStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TaskUpdateState implements _TaskUpdateState {
   const _$_TaskUpdateState(
-      {this.authToken,
-      this.authUser,
-      this.isUpdating = false,
+      {this.isUpdating = false,
       this.isError = false,
       this.errorStatusCode = 0,
       this.errorBody = ''})
@@ -160,10 +132,6 @@ class _$_TaskUpdateState implements _TaskUpdateState {
   factory _$_TaskUpdateState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskUpdateStateFromJson(json);
 
-  @override
-  final OAuth2Token authToken;
-  @override
-  final User authUser;
   @JsonKey(defaultValue: false)
   @override
   final bool isUpdating;
@@ -179,19 +147,13 @@ class _$_TaskUpdateState implements _TaskUpdateState {
 
   @override
   String toString() {
-    return 'TaskUpdateState(authToken: $authToken, authUser: $authUser, isUpdating: $isUpdating, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskUpdateState(isUpdating: $isUpdating, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _TaskUpdateState &&
-            (identical(other.authToken, authToken) ||
-                const DeepCollectionEquality()
-                    .equals(other.authToken, authToken)) &&
-            (identical(other.authUser, authUser) ||
-                const DeepCollectionEquality()
-                    .equals(other.authUser, authUser)) &&
             (identical(other.isUpdating, isUpdating) ||
                 const DeepCollectionEquality()
                     .equals(other.isUpdating, isUpdating)) &&
@@ -209,8 +171,6 @@ class _$_TaskUpdateState implements _TaskUpdateState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(authToken) ^
-      const DeepCollectionEquality().hash(authUser) ^
       const DeepCollectionEquality().hash(isUpdating) ^
       const DeepCollectionEquality().hash(isError) ^
       const DeepCollectionEquality().hash(errorStatusCode) ^
@@ -228,9 +188,7 @@ class _$_TaskUpdateState implements _TaskUpdateState {
 
 abstract class _TaskUpdateState implements TaskUpdateState {
   const factory _TaskUpdateState(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isUpdating,
+      {bool isUpdating,
       bool isError,
       int errorStatusCode,
       String errorBody}) = _$_TaskUpdateState;
@@ -238,10 +196,6 @@ abstract class _TaskUpdateState implements TaskUpdateState {
   factory _TaskUpdateState.fromJson(Map<String, dynamic> json) =
       _$_TaskUpdateState.fromJson;
 
-  @override
-  OAuth2Token get authToken;
-  @override
-  User get authUser;
   @override
   bool get isUpdating;
   @override

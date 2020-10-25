@@ -1,33 +1,27 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/organisms/task_new_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
-import 'package:todo_flutter_sample/states/task/task_create_state.dart';
-import 'package:todo_flutter_sample/states/task/task_form_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class TaskNewPage extends StatefulWidget {
+class TaskNewPage extends HookWidget {
   static String routeName = '/task/new';
 
   @override
-  _TaskNewPageState createState() => _TaskNewPageState();
-}
-
-class _TaskNewPageState extends State<TaskNewPage> {
-  bool isInitialized = false;
-
-  @override
   Widget build(BuildContext context) {
-    if (isInitialized == false) {
+    final isInitialized = useState(false);
+    final taskCreateStateNotifier = useProvider(taskCreateStateProvider);
+
+    useEffect(() {
       Timer.run(() {
-        context.read<TaskFormStateNotifier>().clear();
-        context.read<TaskCreateStateNotifier>().clear();
-        setState(() {
-          isInitialized = true;
-        });
+        taskCreateStateNotifier.clear();
+        isInitialized.value = true;
       });
-    }
+      return () {};
+    }, []);
 
     const title = 'New Task';
 
@@ -35,7 +29,8 @@ class _TaskNewPageState extends State<TaskNewPage> {
       appBar: AppBar(
         title: const Text(title),
       ),
-      body: PageTemplate(body: isInitialized ? TaskNewBody() : Container()),
+      body:
+          PageTemplate(body: isInitialized.value ? TaskNewBody() : Container()),
     );
   }
 }

@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
-import 'package:todo_flutter_sample/models/oauth2_token.dart';
-import 'package:todo_flutter_sample/models/user.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_web_view_page.dart';
 import 'package:todo_flutter_sample/pages/task/list_page.dart';
-import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class DrawerContent extends StatelessWidget {
+class DrawerContent extends HookWidget {
   final _appConfig = AppConfig();
 
   @override
   Widget build(BuildContext context) {
-    final token =
-        context.select<AuthState, OAuth2Token>((state) => state.token);
-    final user = context.select<AuthState, User>((state) => state.user);
+    final authStateNotifier = useProvider(authStateProvider);
+    final authState = useProvider(authStateProvider.state);
+    final token = authState.token;
+    final user = authState.user;
+
     final children = <Widget>[
       const DrawerHeader(
         child: Center(
@@ -51,7 +52,7 @@ class DrawerContent extends StatelessWidget {
         ListTile(
           title: const Text('Sign out'),
           onTap: () {
-            context.read<AuthStateNotifier>().signOut();
+            authStateNotifier.signOut();
             Fluttertoast.showToast(
               msg: 'Signed out.',
               backgroundColor: _appConfig.toastBackgroundColor,

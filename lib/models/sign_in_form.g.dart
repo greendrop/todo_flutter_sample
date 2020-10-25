@@ -6,13 +6,14 @@ part of 'sign_in_form.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SignInForm _$SignInFormFromJson(Map<String, dynamic> json) {
-  return SignInForm()
-    ..email = json['email'] as String
-    ..password = json['password'] as String;
+_$_SignInForm _$_$_SignInFormFromJson(Map<String, dynamic> json) {
+  return _$_SignInForm(
+    email: json['email'] as String,
+    password: json['password'] as String,
+  );
 }
 
-Map<String, dynamic> _$SignInFormToJson(SignInForm instance) =>
+Map<String, dynamic> _$_$_SignInFormToJson(_$_SignInForm instance) =>
     <String, dynamic>{
       'email': instance.email,
       'password': instance.password,

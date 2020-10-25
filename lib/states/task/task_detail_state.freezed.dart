@@ -17,16 +17,12 @@ class _$TaskDetailStateTearOff {
 
 // ignore: unused_element
   _TaskDetailState call(
-      {OAuth2Token authToken,
-      User authUser,
-      Task task,
+      {Task task,
       bool isFetching = false,
       bool isError = false,
       int errorStatusCode = 0,
       String errorBody = ''}) {
     return _TaskDetailState(
-      authToken: authToken,
-      authUser: authUser,
       task: task,
       isFetching: isFetching,
       isError: isError,
@@ -40,8 +36,6 @@ class _$TaskDetailStateTearOff {
 const $TaskDetailState = _$TaskDetailStateTearOff();
 
 mixin _$TaskDetailState {
-  OAuth2Token get authToken;
-  User get authUser;
   Task get task;
   bool get isFetching;
   bool get isError;
@@ -57,13 +51,13 @@ abstract class $TaskDetailStateCopyWith<$Res> {
           TaskDetailState value, $Res Function(TaskDetailState) then) =
       _$TaskDetailStateCopyWithImpl<$Res>;
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      Task task,
+      {Task task,
       bool isFetching,
       bool isError,
       int errorStatusCode,
       String errorBody});
+
+  $TaskCopyWith<$Res> get task;
 }
 
 class _$TaskDetailStateCopyWithImpl<$Res>
@@ -76,8 +70,6 @@ class _$TaskDetailStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object task = freezed,
     Object isFetching = freezed,
     Object isError = freezed,
@@ -85,9 +77,6 @@ class _$TaskDetailStateCopyWithImpl<$Res>
     Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       task: task == freezed ? _value.task : task as Task,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
@@ -98,6 +87,16 @@ class _$TaskDetailStateCopyWithImpl<$Res>
       errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
+
+  @override
+  $TaskCopyWith<$Res> get task {
+    if (_value.task == null) {
+      return null;
+    }
+    return $TaskCopyWith<$Res>(_value.task, (value) {
+      return _then(_value.copyWith(task: value));
+    });
+  }
 }
 
 abstract class _$TaskDetailStateCopyWith<$Res>
@@ -107,13 +106,14 @@ abstract class _$TaskDetailStateCopyWith<$Res>
       __$TaskDetailStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      Task task,
+      {Task task,
       bool isFetching,
       bool isError,
       int errorStatusCode,
       String errorBody});
+
+  @override
+  $TaskCopyWith<$Res> get task;
 }
 
 class __$TaskDetailStateCopyWithImpl<$Res>
@@ -128,8 +128,6 @@ class __$TaskDetailStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object task = freezed,
     Object isFetching = freezed,
     Object isError = freezed,
@@ -137,9 +135,6 @@ class __$TaskDetailStateCopyWithImpl<$Res>
     Object errorBody = freezed,
   }) {
     return _then(_TaskDetailState(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       task: task == freezed ? _value.task : task as Task,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
@@ -155,9 +150,7 @@ class __$TaskDetailStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TaskDetailState implements _TaskDetailState {
   const _$_TaskDetailState(
-      {this.authToken,
-      this.authUser,
-      this.task,
+      {this.task,
       this.isFetching = false,
       this.isError = false,
       this.errorStatusCode = 0,
@@ -170,10 +163,6 @@ class _$_TaskDetailState implements _TaskDetailState {
   factory _$_TaskDetailState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskDetailStateFromJson(json);
 
-  @override
-  final OAuth2Token authToken;
-  @override
-  final User authUser;
   @override
   final Task task;
   @JsonKey(defaultValue: false)
@@ -191,19 +180,13 @@ class _$_TaskDetailState implements _TaskDetailState {
 
   @override
   String toString() {
-    return 'TaskDetailState(authToken: $authToken, authUser: $authUser, task: $task, isFetching: $isFetching, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskDetailState(task: $task, isFetching: $isFetching, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _TaskDetailState &&
-            (identical(other.authToken, authToken) ||
-                const DeepCollectionEquality()
-                    .equals(other.authToken, authToken)) &&
-            (identical(other.authUser, authUser) ||
-                const DeepCollectionEquality()
-                    .equals(other.authUser, authUser)) &&
             (identical(other.task, task) ||
                 const DeepCollectionEquality().equals(other.task, task)) &&
             (identical(other.isFetching, isFetching) ||
@@ -223,8 +206,6 @@ class _$_TaskDetailState implements _TaskDetailState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(authToken) ^
-      const DeepCollectionEquality().hash(authUser) ^
       const DeepCollectionEquality().hash(task) ^
       const DeepCollectionEquality().hash(isFetching) ^
       const DeepCollectionEquality().hash(isError) ^
@@ -243,9 +224,7 @@ class _$_TaskDetailState implements _TaskDetailState {
 
 abstract class _TaskDetailState implements TaskDetailState {
   const factory _TaskDetailState(
-      {OAuth2Token authToken,
-      User authUser,
-      Task task,
+      {Task task,
       bool isFetching,
       bool isError,
       int errorStatusCode,
@@ -254,10 +233,6 @@ abstract class _TaskDetailState implements TaskDetailState {
   factory _TaskDetailState.fromJson(Map<String, dynamic> json) =
       _$_TaskDetailState.fromJson;
 
-  @override
-  OAuth2Token get authToken;
-  @override
-  User get authUser;
   @override
   Task get task;
   @override

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/pages/sign_in_page.dart';
@@ -11,21 +11,14 @@ import 'package:todo_flutter_sample/pages/task/detail_page.dart';
 import 'package:todo_flutter_sample/pages/task/edit_page.dart';
 import 'package:todo_flutter_sample/pages/task/list_page.dart';
 import 'package:todo_flutter_sample/pages/task/new_page.dart';
-import 'package:todo_flutter_sample/states/auth_state.dart';
-import 'package:todo_flutter_sample/states/sign_in_form_state.dart';
-import 'package:todo_flutter_sample/states/task/task_create_state.dart';
-import 'package:todo_flutter_sample/states/task/task_delete_state.dart';
-import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
-import 'package:todo_flutter_sample/states/task/task_form_state.dart';
-import 'package:todo_flutter_sample/states/task/task_list_state.dart';
-import 'package:todo_flutter_sample/states/task/task_update_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class AppRoot extends StatelessWidget {
+class AppRoot extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final appConfig = AppConfig();
     if (!appConfig.envConfig.displayEnv) {
-      return AppRootProvider();
+      return AppRootMain();
     }
 
     return Directionality(
@@ -34,63 +27,35 @@ class AppRoot extends StatelessWidget {
           color: Colors.red,
           message: appConfig.envConfig.env.toUpperCase(),
           location: BannerLocation.topStart,
-          child: AppRootProvider()),
+          child: AppRootMain()),
     );
   }
 }
 
-class AppRootProvider extends StatelessWidget {
+class AppRootMain extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        StateNotifierProvider<AuthStateNotifier, AuthState>(
-            create: (_) => AuthStateNotifier()),
-        StateNotifierProvider<SignInFormStateNotifier, SignInFormState>(
-            create: (_) => SignInFormStateNotifier()),
-        StateNotifierProvider<TaskListStateNotifier, TaskListState>(
-            create: (_) => TaskListStateNotifier()),
-        StateNotifierProvider<TaskDetailStateNotifier, TaskDetailState>(
-            create: (_) => TaskDetailStateNotifier()),
-        StateNotifierProvider<TaskFormStateNotifier, TaskFormState>(
-            create: (_) => TaskFormStateNotifier()),
-        StateNotifierProvider<TaskCreateStateNotifier, TaskCreateState>(
-            create: (_) => TaskCreateStateNotifier()),
-        StateNotifierProvider<TaskUpdateStateNotifier, TaskUpdateState>(
-            create: (_) => TaskUpdateStateNotifier()),
-        StateNotifierProvider<TaskDeleteStateNotifier, TaskDeleteState>(
-            create: (_) => TaskDeleteStateNotifier()),
-      ],
-      child: AppRootMain(),
-    );
-  }
-}
+    final isInitialized = useState(false);
+    final refreshTokenTimer = useState<Timer>(null);
+    final authStateNotifier = useProvider(authStateProvider);
 
-class AppRootMain extends StatefulWidget {
-  @override
-  _AppRootMainState createState() => _AppRootMainState();
-}
+    useEffect(() {
+      Timer.run(() async {
+        await authStateNotifier.initializeToken();
+        await authStateNotifier.initializeUser();
 
-class _AppRootMainState extends State<AppRootMain> {
-  bool isInitialized = false;
-  Timer refreshTokenTimer;
+        refreshTokenTimer.value =
+            Timer.periodic(const Duration(minutes: 1), (timer) {
+          authStateNotifier.refreshToken();
+        });
 
-  @override
-  void dispose() {
-    super.dispose();
-    refreshTokenTimer.cancel();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (isInitialized == false) {
-      refreshTokenTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
-        context.read<AuthStateNotifier>().refreshToken();
+        isInitialized.value = true;
       });
-      setState(() {
-        isInitialized = true;
-      });
-    }
+
+      return () {
+        refreshTokenTimer.value.cancel();
+      };
+    }, []);
 
     return MaterialApp(
         title: 'ToDo Flutter Sample',

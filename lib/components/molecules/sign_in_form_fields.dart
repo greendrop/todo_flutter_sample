@@ -1,56 +1,38 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:todo_flutter_sample/models/sign_in_form.dart';
-import 'package:todo_flutter_sample/states/sign_in_form_state.dart';
 
-class SignInFormFields extends StatefulWidget {
-  @override
-  _SignInFormFieldsState createState() => _SignInFormFieldsState();
-}
+class SignInFormFields extends HookWidget {
+  const SignInFormFields(
+      this.signInForm, this.handleChangeEmail, this.handleChangePassword);
 
-class _SignInFormFieldsState extends State<SignInFormFields> {
-  bool isInitialized = false;
-  final _emailTextEditingController = TextEditingController();
-  final _passwordTextEditingController = TextEditingController();
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _emailTextEditingController.dispose();
-    _passwordTextEditingController.dispose();
-  }
-
-  void _handleEmail() {
-    context
-        .read<SignInFormStateNotifier>()
-        .handleEmail(_emailTextEditingController.text);
-  }
-
-  void _handlePassword() {
-    context
-        .read<SignInFormStateNotifier>()
-        .handlePassword(_passwordTextEditingController.text);
-  }
+  final SignInForm signInForm;
+  final Function handleChangeEmail;
+  final Function handleChangePassword;
 
   @override
   Widget build(BuildContext context) {
-    final signInForm = context.select<SignInFormState, SignInForm>(
-        (state) => state.signInForm ?? SignInForm());
+    final isInitialized = useState(false);
+    final emailTextEditingController = useTextEditingController();
+    final passwordTextEditingController = useTextEditingController();
 
-    if (isInitialized == false) {
-      Timer.run(() {
-        _emailTextEditingController.text = signInForm.email ?? '';
-        _passwordTextEditingController.text = signInForm.password ?? '';
-        _emailTextEditingController.addListener(_handleEmail);
-        _passwordTextEditingController.addListener(_handlePassword);
-        setState(() {
-          isInitialized = true;
+    useEffect(() {
+      emailTextEditingController
+        ..text = signInForm.email ?? ''
+        ..addListener(() {
+          handleChangeEmail(emailTextEditingController.value.text);
         });
-      });
+      passwordTextEditingController
+        ..text = signInForm.password ?? ''
+        ..addListener(() {
+          handleChangePassword(passwordTextEditingController.value.text);
+        });
+      isInitialized.value = true;
 
+      return () {};
+    }, []);
+
+    if (isInitialized.value == false) {
       return Container();
     }
 
@@ -58,13 +40,13 @@ class _SignInFormFieldsState extends State<SignInFormFields> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-              controller: _emailTextEditingController,
+              controller: emailTextEditingController,
               decoration: const InputDecoration(
                 labelText: 'Email',
               ),
               validator: SignInForm.emailValidator),
           TextFormField(
-            controller: _passwordTextEditingController,
+            controller: passwordTextEditingController,
             decoration: const InputDecoration(
               labelText: 'Password',
             ),

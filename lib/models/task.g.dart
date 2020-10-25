@@ -6,21 +6,22 @@ part of 'task.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Task _$TaskFromJson(Map<String, dynamic> json) {
-  return Task()
-    ..id = json['id'] as int
-    ..title = json['title'] as String
-    ..description = json['description'] as String
-    ..done = json['done'] as bool ?? false
-    ..createdAt = json['created_at'] == null
+_$_Task _$_$_TaskFromJson(Map<String, dynamic> json) {
+  return _$_Task(
+    id: json['id'] as int,
+    title: json['title'] as String,
+    description: json['description'] as String,
+    done: json['done'] as bool,
+    createdAt: json['created_at'] == null
         ? null
-        : DateTime.parse(json['created_at'] as String)
-    ..updatedAt = json['updated_at'] == null
+        : DateTime.parse(json['created_at'] as String),
+    updatedAt: json['updated_at'] == null
         ? null
-        : DateTime.parse(json['updated_at'] as String);
+        : DateTime.parse(json['updated_at'] as String),
+  );
 }
 
-Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
+Map<String, dynamic> _$_$_TaskToJson(_$_Task instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,

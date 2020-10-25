@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/sign_in_form_fields.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/sign_in_form.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
-import 'package:todo_flutter_sample/states/auth_state.dart';
-import 'package:todo_flutter_sample/states/sign_in_form_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class SignInBody extends StatefulWidget {
-  @override
-  _SignInBodyState createState() => _SignInBodyState();
-}
-
-class _SignInBodyState extends State<SignInBody> {
+class SignInBody extends HookWidget {
   final _appConfig = AppConfig();
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final signInForm = context
-        .select<SignInFormState, SignInForm>((state) => state.signInForm);
+    final authStateNotifier = useProvider(authStateProvider);
+    final authState = useProvider(authStateProvider.state);
+    final isFetching = authState.isFetching;
+    final signInForm = useState(const SignInForm());
 
-    final isFetching =
-        context.select<AuthState, bool>((state) => state.isFetching);
+    void handleChangeEmail(String value) {
+      signInForm.value = signInForm.value.copyWith(email: value);
+    }
+
+    void handleChangePassword(String value) {
+      signInForm.value = signInForm.value.copyWith(password: value);
+    }
 
     if (isFetching) {
       return CenterCircularProgressIndicator();
@@ -35,7 +37,8 @@ class _SignInBodyState extends State<SignInBody> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SignInFormFields(),
+              SignInFormFields(
+                  signInForm.value, handleChangeEmail, handleChangePassword),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(children: <Widget>[
@@ -44,10 +47,10 @@ class _SignInBodyState extends State<SignInBody> {
                         child: RaisedButton(
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              final authState = await context
-                                  .read<AuthStateNotifier>()
-                                  .fetchTokenAndUserByUsernameAndCode(
-                                      signInForm.email, signInForm.password);
+                              await authStateNotifier
+                                  .fetchTokenAndUserByUsernameAndPassword(
+                                      signInForm.value.email,
+                                      signInForm.value.password);
 
                               if (!authState.isError) {
                                 await Fluttertoast.showToast(

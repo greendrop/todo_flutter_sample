@@ -8,12 +8,6 @@ part of 'task_list_state.dart';
 
 _$_TaskListState _$_$_TaskListStateFromJson(Map<String, dynamic> json) {
   return _$_TaskListState(
-    authToken: json['authToken'] == null
-        ? null
-        : OAuth2Token.fromJson(json['authToken'] as Map<String, dynamic>),
-    authUser: json['authUser'] == null
-        ? null
-        : User.fromJson(json['authUser'] as Map<String, dynamic>),
     tasks: (json['tasks'] as List)
         ?.map(
             (e) => e == null ? null : Task.fromJson(e as Map<String, dynamic>))
@@ -32,8 +26,6 @@ _$_TaskListState _$_$_TaskListStateFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_TaskListStateToJson(_$_TaskListState instance) =>
     <String, dynamic>{
-      'authToken': instance.authToken,
-      'authUser': instance.authUser,
       'tasks': instance.tasks,
       'totalCount': instance.totalCount,
       'page': instance.page,

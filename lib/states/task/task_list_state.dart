@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart' as openapi;
 import 'package:state_notifier/state_notifier.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
-import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/task.dart';
-import 'package:todo_flutter_sample/models/user.dart';
-import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
 part 'task_list_state.freezed.dart';
 part 'task_list_state.g.dart';
@@ -17,8 +16,6 @@ const _taskListPerPage = 10;
 @freezed
 abstract class TaskListState with _$TaskListState {
   const factory TaskListState({
-    OAuth2Token authToken,
-    User authUser,
     List<Task> tasks,
     @Default(0) int totalCount,
     @Default(1) int page,
@@ -35,25 +32,10 @@ abstract class TaskListState with _$TaskListState {
   }
 }
 
-class TaskListStateNotifier extends StateNotifier<TaskListState>
-    with LocatorMixin {
-  TaskListStateNotifier() : super(const TaskListState());
+class TaskListStateNotifier extends StateNotifier<TaskListState> {
+  TaskListStateNotifier(this.read) : super(const TaskListState());
 
-  @override
-  void initState() {
-    super.initState();
-
-    state = state.copyWith(
-        authToken: read<AuthState>().token, authUser: read<AuthState>().user);
-  }
-
-  @override
-  void update(Locator watch) {
-    super.update(watch);
-
-    state = state.copyWith(
-        authToken: watch<AuthState>().token, authUser: watch<AuthState>().user);
-  }
+  final Reader read;
 
   TaskListState setTasks(List<Task> tasks) {
     return state = state.copyWith(tasks: tasks);
@@ -120,8 +102,9 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
     final appConfig = AppConfig();
     final apiClient =
         openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    final authState = read(authStateProvider.state);
     apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
-        state.authToken.accessToken;
+        authState.token.accessToken;
     final tasksApi = openapi.TasksApi(apiClient);
 
     try {
@@ -156,8 +139,9 @@ class TaskListStateNotifier extends StateNotifier<TaskListState>
     final appConfig = AppConfig();
     final apiClient =
         openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    final authState = read(authStateProvider.state);
     apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
-        state.authToken.accessToken;
+        authState.token.accessToken;
     final tasksApi = openapi.TasksApi(apiClient);
 
     try {

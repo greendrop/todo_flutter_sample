@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:todo_flutter_sample/models/task_form.dart';
+import 'package:todo_flutter_sample/helpers/filter.dart';
+import 'package:todo_flutter_sample/models/task.dart';
 
-class TaskFormFields extends HookWidget {
-  const TaskFormFields(this.taskForm, this.handleChangeTitle,
-      this.handleChangeDescription, this.handleChangeDone);
+class TaskDetailFields extends HookWidget {
+  const TaskDetailFields(this.task);
 
-  final TaskForm taskForm;
-  final Function handleChangeTitle;
-  final Function handleChangeDescription;
-  final Function handleChangeDone;
+  final Task task;
 
   @override
   Widget build(BuildContext context) {
     final isInitialized = useState(false);
     final titleTextEditingController =
-        useTextEditingController(text: taskForm.title ?? '');
+        useTextEditingController(text: task.title ?? '');
     final descriptionTextEditingController =
-        useTextEditingController(text: taskForm.description ?? '');
-    final done = useState(taskForm.done);
+        useTextEditingController(text: task.description ?? '');
+    final done = useState(task.done);
+    final createdAtTextEditingController =
+        useTextEditingController(text: Filter.datetime(task.createdAt));
+    final updatedAtTextEditingController =
+        useTextEditingController(text: Filter.datetime(task.updatedAt));
 
     useEffect(() {
-      titleTextEditingController.addListener(() {
-        handleChangeTitle(titleTextEditingController.text);
-      });
-      descriptionTextEditingController.addListener(() {
-        handleChangeDescription(descriptionTextEditingController.text);
-      });
       isInitialized.value = true;
-
       return () {};
     }, []);
 
@@ -42,19 +36,20 @@ class TaskFormFields extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-              controller: titleTextEditingController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-              ),
-              validator: TaskForm.titleValidator),
+            controller: titleTextEditingController,
+            decoration: const InputDecoration(
+              labelText: 'Title',
+            ),
+            readOnly: true,
+          ),
           TextFormField(
             controller: descriptionTextEditingController,
             decoration: const InputDecoration(
               labelText: 'Description',
             ),
+            readOnly: true,
             keyboardType: TextInputType.multiline,
             maxLines: null,
-            validator: TaskForm.descriptionValidator,
           ),
           Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
@@ -66,13 +61,24 @@ class TaskFormFields extends HookWidget {
                           color: themeData.disabledColor, fontSize: 12)),
                   Switch(
                     value: done.value,
-                    onChanged: (value) {
-                      done.value = value;
-                      handleChangeDone(value);
-                    },
+                    onChanged: (value) {},
                   )
                 ],
-              ))
+              )),
+          TextFormField(
+            controller: createdAtTextEditingController,
+            decoration: const InputDecoration(
+              labelText: 'Created at',
+            ),
+            readOnly: true,
+          ),
+          TextFormField(
+            controller: updatedAtTextEditingController,
+            decoration: const InputDecoration(
+              labelText: 'Updated at',
+            ),
+            readOnly: true,
+          ),
         ]);
   }
 }

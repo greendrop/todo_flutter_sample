@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_form_fields.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/states/task/task_create_state.dart';
-import 'package:todo_flutter_sample/states/task/task_form_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class TaskNewBody extends StatefulWidget {
-  @override
-  _TaskNewBodyState createState() => _TaskNewBodyState();
-}
-
-class _TaskNewBodyState extends State<TaskNewBody> {
+class TaskNewBody extends HookWidget {
   final _appConfig = AppConfig();
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final taskForm =
-        context.select<TaskFormState, TaskForm>((state) => state.taskForm);
+    final taskForm = useState(const TaskForm());
+    final taskCreateStateNotifier = useProvider(taskCreateStateProvider);
+    final taskCreateState = useProvider(taskCreateStateProvider.state);
+    final isCreating = taskCreateState.isCreating;
 
-    final isCreating =
-        context.select<TaskCreateState, bool>((state) => state.isCreating);
+    void handleChangeTitle(String value) {
+      taskForm.value = taskForm.value.copyWith(title: value);
+    }
+
+    void handleChangeDescription(String value) {
+      taskForm.value = taskForm.value.copyWith(description: value);
+    }
+
+    // ignore: avoid_positional_boolean_parameters
+    void handleChangeDone(bool value) {
+      taskForm.value = taskForm.value.copyWith(done: value);
+    }
 
     if (isCreating) {
       return CenterCircularProgressIndicator();
@@ -34,7 +41,8 @@ class _TaskNewBodyState extends State<TaskNewBody> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              TaskFormFields(),
+              TaskFormFields(taskForm.value, handleChangeTitle,
+                  handleChangeDescription, handleChangeDone),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(children: <Widget>[
@@ -43,9 +51,8 @@ class _TaskNewBodyState extends State<TaskNewBody> {
                         child: RaisedButton(
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              final taskCreateState = await context
-                                  .read<TaskCreateStateNotifier>()
-                                  .createTask(taskForm);
+                              await taskCreateStateNotifier
+                                  .createTask(taskForm.value);
 
                               if (!taskCreateState.isError) {
                                 Navigator.of(context).pop();

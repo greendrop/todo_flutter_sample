@@ -6,14 +6,16 @@ part of 'task_form.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TaskForm _$TaskFormFromJson(Map<String, dynamic> json) {
-  return TaskForm()
-    ..title = json['title'] as String
-    ..description = json['description'] as String
-    ..done = json['done'] as bool ?? false;
+_$_TaskForm _$_$_TaskFormFromJson(Map<String, dynamic> json) {
+  return _$_TaskForm(
+    title: json['title'] as String,
+    description: json['description'] as String,
+    done: json['done'] as bool,
+  );
 }
 
-Map<String, dynamic> _$TaskFormToJson(TaskForm instance) => <String, dynamic>{
+Map<String, dynamic> _$_$_TaskFormToJson(_$_TaskForm instance) =>
+    <String, dynamic>{
       'title': instance.title,
       'description': instance.description,
       'done': instance.done,
