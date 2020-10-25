@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/organisms/drawer_content.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/helpers/oauth2_client.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
-import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class SignInWebViewPage extends StatelessWidget {
+class SignInWebViewPage extends HookWidget {
   static String routeName = '/sign_in_web_view';
   final _appConfig = AppConfig();
 
@@ -20,6 +21,8 @@ class SignInWebViewPage extends StatelessWidget {
     WebViewController controller;
     final controllerCompleter = Completer<WebViewController>();
     final oauth2Client = OAuth2Client();
+    final authStateNotifier = useProvider(authStateProvider);
+    final authState = useProvider(authStateProvider.state);
 
     return WillPopScope(
       onWillPop: () async {
@@ -49,9 +52,8 @@ class SignInWebViewPage extends StatelessWidget {
               onPageStarted: (String url) async {
                 if (oauth2Client.isRedirectUrlWithCode(url)) {
                   final code = OAuth2Client().getCodeFromUrl(url);
-                  final authState = await context
-                      .read<AuthStateNotifier>()
-                      .fetchTokenAndUserByCode(code);
+
+                  await authStateNotifier.fetchTokenAndUserByCode(code);
 
                   if (!authState.isError) {
                     await Fluttertoast.showToast(

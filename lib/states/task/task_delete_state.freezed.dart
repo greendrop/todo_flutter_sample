@@ -17,15 +17,11 @@ class _$TaskDeleteStateTearOff {
 
 // ignore: unused_element
   _TaskDeleteState call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isDeleting = false,
+      {bool isDeleting = false,
       bool isError = false,
       int errorStatusCode = 0,
       String errorBody = ''}) {
     return _TaskDeleteState(
-      authToken: authToken,
-      authUser: authUser,
       isDeleting: isDeleting,
       isError: isError,
       errorStatusCode: errorStatusCode,
@@ -38,8 +34,6 @@ class _$TaskDeleteStateTearOff {
 const $TaskDeleteState = _$TaskDeleteStateTearOff();
 
 mixin _$TaskDeleteState {
-  OAuth2Token get authToken;
-  User get authUser;
   bool get isDeleting;
   bool get isError;
   int get errorStatusCode;
@@ -54,12 +48,7 @@ abstract class $TaskDeleteStateCopyWith<$Res> {
           TaskDeleteState value, $Res Function(TaskDeleteState) then) =
       _$TaskDeleteStateCopyWithImpl<$Res>;
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isDeleting,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      {bool isDeleting, bool isError, int errorStatusCode, String errorBody});
 }
 
 class _$TaskDeleteStateCopyWithImpl<$Res>
@@ -72,17 +61,12 @@ class _$TaskDeleteStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object isDeleting = freezed,
     Object isError = freezed,
     Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       isDeleting:
           isDeleting == freezed ? _value.isDeleting : isDeleting as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
@@ -101,12 +85,7 @@ abstract class _$TaskDeleteStateCopyWith<$Res>
       __$TaskDeleteStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isDeleting,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      {bool isDeleting, bool isError, int errorStatusCode, String errorBody});
 }
 
 class __$TaskDeleteStateCopyWithImpl<$Res>
@@ -121,17 +100,12 @@ class __$TaskDeleteStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object isDeleting = freezed,
     Object isError = freezed,
     Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_TaskDeleteState(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       isDeleting:
           isDeleting == freezed ? _value.isDeleting : isDeleting as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
@@ -146,9 +120,7 @@ class __$TaskDeleteStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TaskDeleteState implements _TaskDeleteState {
   const _$_TaskDeleteState(
-      {this.authToken,
-      this.authUser,
-      this.isDeleting = false,
+      {this.isDeleting = false,
       this.isError = false,
       this.errorStatusCode = 0,
       this.errorBody = ''})
@@ -160,10 +132,6 @@ class _$_TaskDeleteState implements _TaskDeleteState {
   factory _$_TaskDeleteState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskDeleteStateFromJson(json);
 
-  @override
-  final OAuth2Token authToken;
-  @override
-  final User authUser;
   @JsonKey(defaultValue: false)
   @override
   final bool isDeleting;
@@ -179,19 +147,13 @@ class _$_TaskDeleteState implements _TaskDeleteState {
 
   @override
   String toString() {
-    return 'TaskDeleteState(authToken: $authToken, authUser: $authUser, isDeleting: $isDeleting, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskDeleteState(isDeleting: $isDeleting, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _TaskDeleteState &&
-            (identical(other.authToken, authToken) ||
-                const DeepCollectionEquality()
-                    .equals(other.authToken, authToken)) &&
-            (identical(other.authUser, authUser) ||
-                const DeepCollectionEquality()
-                    .equals(other.authUser, authUser)) &&
             (identical(other.isDeleting, isDeleting) ||
                 const DeepCollectionEquality()
                     .equals(other.isDeleting, isDeleting)) &&
@@ -209,8 +171,6 @@ class _$_TaskDeleteState implements _TaskDeleteState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(authToken) ^
-      const DeepCollectionEquality().hash(authUser) ^
       const DeepCollectionEquality().hash(isDeleting) ^
       const DeepCollectionEquality().hash(isError) ^
       const DeepCollectionEquality().hash(errorStatusCode) ^
@@ -228,9 +188,7 @@ class _$_TaskDeleteState implements _TaskDeleteState {
 
 abstract class _TaskDeleteState implements TaskDeleteState {
   const factory _TaskDeleteState(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isDeleting,
+      {bool isDeleting,
       bool isError,
       int errorStatusCode,
       String errorBody}) = _$_TaskDeleteState;
@@ -238,10 +196,6 @@ abstract class _TaskDeleteState implements TaskDeleteState {
   factory _TaskDeleteState.fromJson(Map<String, dynamic> json) =
       _$_TaskDeleteState.fromJson;
 
-  @override
-  OAuth2Token get authToken;
-  @override
-  User get authUser;
   @override
   bool get isDeleting;
   @override

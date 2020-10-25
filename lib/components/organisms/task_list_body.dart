@@ -1,25 +1,25 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_list_item.dart';
-import 'package:todo_flutter_sample/models/task.dart';
-import 'package:todo_flutter_sample/states/task/task_list_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class TaskListBody extends StatelessWidget {
+class TaskListBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    Future<void> _onRefresh() async {
-      await context.read<TaskListStateNotifier>().fetchTasks({});
-    }
+    final taskListStateNotifier = useProvider(taskListStateProvider);
+    final taskListState = useProvider(taskListStateProvider.state);
 
-    final tasks =
-        context.select<TaskListState, List<Task>>((state) => state.tasks);
-    final isFetching =
-        context.select<TaskListState, bool>((state) => state.isFetching);
-    final isLastFetched =
-        context.select<TaskListState, bool>((state) => state.isLastFetched);
+    final tasks = taskListState.tasks;
+    final isFetching = taskListState.isFetching;
+    final isLastFetched = taskListState.isLastFetched;
+
+    Future<void> _onRefresh() async {
+      await taskListStateNotifier.fetchTasks({});
+    }
 
     final listItems = <Widget>[
       ...(tasks ?? []).map((item) => TaskListItem(item))
@@ -32,7 +32,7 @@ class TaskListBody extends StatelessWidget {
       if (index == length) {
         if (!isLastFetched) {
           Timer.run(() {
-            context.read<TaskListStateNotifier>().fetchAdditionalTasks({});
+            taskListStateNotifier.fetchAdditionalTasks({});
           });
 
           return CenterCircularProgressIndicator();

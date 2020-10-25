@@ -1,22 +1,18 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'task_form.freezed.dart';
 part 'task_form.g.dart';
 
-@JsonSerializable()
-class TaskForm {
-  TaskForm();
-
-  @JsonKey(name: 'title')
-  String title;
-  @JsonKey(name: 'description')
-  String description;
-  @JsonKey(name: 'done', defaultValue: false)
-  bool done;
-
-  // ignore: sort_constructors_first
-  factory TaskForm.fromJson(Map<String, dynamic> json) =>
-      _$TaskFormFromJson(json);
-  Map<String, dynamic> toJson() => _$TaskFormToJson(this);
+@freezed
+abstract class TaskForm with _$TaskForm {
+  const factory TaskForm({
+    @JsonKey(name: 'title') String title,
+    @JsonKey(name: 'description') String description,
+    @JsonKey(name: 'done') @Default(false) bool done,
+  }) = _TaskForm;
+  factory TaskForm.fromJson(Map<String, dynamic> json) {
+    return _$TaskFormFromJson(json);
+  }
 
   static String titleValidator(String value) {
     if (value.isEmpty) {

@@ -17,9 +17,7 @@ class _$TaskListStateTearOff {
 
 // ignore: unused_element
   _TaskListState call(
-      {OAuth2Token authToken,
-      User authUser,
-      List<Task> tasks,
+      {List<Task> tasks,
       int totalCount = 0,
       int page = 1,
       int perPage = _taskListPerPage,
@@ -30,8 +28,6 @@ class _$TaskListStateTearOff {
       int errorStatusCode = 0,
       String errorBody = ''}) {
     return _TaskListState(
-      authToken: authToken,
-      authUser: authUser,
       tasks: tasks,
       totalCount: totalCount,
       page: page,
@@ -50,8 +46,6 @@ class _$TaskListStateTearOff {
 const $TaskListState = _$TaskListStateTearOff();
 
 mixin _$TaskListState {
-  OAuth2Token get authToken;
-  User get authUser;
   List<Task> get tasks;
   int get totalCount;
   int get page;
@@ -72,9 +66,7 @@ abstract class $TaskListStateCopyWith<$Res> {
           TaskListState value, $Res Function(TaskListState) then) =
       _$TaskListStateCopyWithImpl<$Res>;
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      List<Task> tasks,
+      {List<Task> tasks,
       int totalCount,
       int page,
       int perPage,
@@ -96,8 +88,6 @@ class _$TaskListStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object tasks = freezed,
     Object totalCount = freezed,
     Object page = freezed,
@@ -110,9 +100,6 @@ class _$TaskListStateCopyWithImpl<$Res>
     Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       tasks: tasks == freezed ? _value.tasks : tasks as List<Task>,
       totalCount: totalCount == freezed ? _value.totalCount : totalCount as int,
       page: page == freezed ? _value.page : page as int,
@@ -139,9 +126,7 @@ abstract class _$TaskListStateCopyWith<$Res>
       __$TaskListStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      List<Task> tasks,
+      {List<Task> tasks,
       int totalCount,
       int page,
       int perPage,
@@ -165,8 +150,6 @@ class __$TaskListStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object tasks = freezed,
     Object totalCount = freezed,
     Object page = freezed,
@@ -179,9 +162,6 @@ class __$TaskListStateCopyWithImpl<$Res>
     Object errorBody = freezed,
   }) {
     return _then(_TaskListState(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       tasks: tasks == freezed ? _value.tasks : tasks as List<Task>,
       totalCount: totalCount == freezed ? _value.totalCount : totalCount as int,
       page: page == freezed ? _value.page : page as int,
@@ -204,9 +184,7 @@ class __$TaskListStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TaskListState implements _TaskListState {
   const _$_TaskListState(
-      {this.authToken,
-      this.authUser,
-      this.tasks,
+      {this.tasks,
       this.totalCount = 0,
       this.page = 1,
       this.perPage = _taskListPerPage,
@@ -229,10 +207,6 @@ class _$_TaskListState implements _TaskListState {
   factory _$_TaskListState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskListStateFromJson(json);
 
-  @override
-  final OAuth2Token authToken;
-  @override
-  final User authUser;
   @override
   final List<Task> tasks;
   @JsonKey(defaultValue: 0)
@@ -265,19 +239,13 @@ class _$_TaskListState implements _TaskListState {
 
   @override
   String toString() {
-    return 'TaskListState(authToken: $authToken, authUser: $authUser, tasks: $tasks, totalCount: $totalCount, page: $page, perPage: $perPage, maxPage: $maxPage, isLastFetched: $isLastFetched, isFetching: $isFetching, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskListState(tasks: $tasks, totalCount: $totalCount, page: $page, perPage: $perPage, maxPage: $maxPage, isLastFetched: $isLastFetched, isFetching: $isFetching, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _TaskListState &&
-            (identical(other.authToken, authToken) ||
-                const DeepCollectionEquality()
-                    .equals(other.authToken, authToken)) &&
-            (identical(other.authUser, authUser) ||
-                const DeepCollectionEquality()
-                    .equals(other.authUser, authUser)) &&
             (identical(other.tasks, tasks) ||
                 const DeepCollectionEquality().equals(other.tasks, tasks)) &&
             (identical(other.totalCount, totalCount) ||
@@ -311,8 +279,6 @@ class _$_TaskListState implements _TaskListState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(authToken) ^
-      const DeepCollectionEquality().hash(authUser) ^
       const DeepCollectionEquality().hash(tasks) ^
       const DeepCollectionEquality().hash(totalCount) ^
       const DeepCollectionEquality().hash(page) ^
@@ -336,9 +302,7 @@ class _$_TaskListState implements _TaskListState {
 
 abstract class _TaskListState implements TaskListState {
   const factory _TaskListState(
-      {OAuth2Token authToken,
-      User authUser,
-      List<Task> tasks,
+      {List<Task> tasks,
       int totalCount,
       int page,
       int perPage,
@@ -352,10 +316,6 @@ abstract class _TaskListState implements TaskListState {
   factory _TaskListState.fromJson(Map<String, dynamic> json) =
       _$_TaskListState.fromJson;
 
-  @override
-  OAuth2Token get authToken;
-  @override
-  User get authUser;
   @override
   List<Task> get tasks;
   @override

@@ -1,37 +1,33 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/organisms/task_detail_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
-import 'package:todo_flutter_sample/states/task/task_delete_state.dart';
-import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class TaskDetailPage extends StatefulWidget {
+class TaskDetailPage extends HookWidget {
   static String routeName = '/task/detail';
 
   @override
-  _TaskDetailPageState createState() => _TaskDetailPageState();
-}
-
-class _TaskDetailPageState extends State<TaskDetailPage> {
-  bool isInitialized = false;
-  TaskDetailArguments arguments;
-
-  @override
   Widget build(BuildContext context) {
-    if (isInitialized == false) {
-      arguments =
-          ModalRoute.of(context).settings.arguments as TaskDetailArguments;
+    final isInitialized = useState(false);
+    final arguments = useState<TaskDetailArguments>(null);
+    final taskDetailStateNotifier = useProvider(taskDetailStateProvider);
+    final taskDeleteStateNotifier = useProvider(taskDetailStateProvider);
+
+    useEffect(() {
       Timer.run(() {
-        context.read<TaskDetailStateNotifier>().clear();
-        context.read<TaskDeleteStateNotifier>().clear();
-        context.read<TaskDetailStateNotifier>().fetchTaskById(arguments.id);
-        setState(() {
-          isInitialized = true;
-        });
+        arguments.value =
+            ModalRoute.of(context).settings.arguments as TaskDetailArguments;
+        taskDetailStateNotifier.clear();
+        taskDeleteStateNotifier.clear();
+        taskDetailStateNotifier.fetchTaskById(arguments.value.id);
+        isInitialized.value = true;
       });
-    }
+      return () {};
+    }, []);
 
     const title = 'Task detail';
 

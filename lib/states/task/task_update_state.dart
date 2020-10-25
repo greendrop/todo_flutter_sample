@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart' as openapi;
 import 'package:state_notifier/state_notifier.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
-import 'package:todo_flutter_sample/models/oauth2_token.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/models/user.dart';
-import 'package:todo_flutter_sample/states/auth_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
 part 'task_update_state.freezed.dart';
 part 'task_update_state.g.dart';
@@ -15,8 +14,6 @@ part 'task_update_state.g.dart';
 @freezed
 abstract class TaskUpdateState with _$TaskUpdateState {
   const factory TaskUpdateState({
-    OAuth2Token authToken,
-    User authUser,
     @Default(false) bool isUpdating,
     @Default(false) bool isError,
     @Default(0) int errorStatusCode,
@@ -27,25 +24,10 @@ abstract class TaskUpdateState with _$TaskUpdateState {
   }
 }
 
-class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState>
-    with LocatorMixin {
-  TaskUpdateStateNotifier() : super(const TaskUpdateState());
+class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState> {
+  TaskUpdateStateNotifier(this.read) : super(const TaskUpdateState());
 
-  @override
-  void initState() {
-    super.initState();
-
-    state = state.copyWith(
-        authToken: read<AuthState>().token, authUser: read<AuthState>().user);
-  }
-
-  @override
-  void update(Locator watch) {
-    super.update(watch);
-
-    state = state.copyWith(
-        authToken: watch<AuthState>().token, authUser: watch<AuthState>().user);
-  }
+  final Reader read;
 
   // ignore: avoid_positional_boolean_parameters
   TaskUpdateState setIsUpdating(bool isUpdating) {
@@ -82,8 +64,9 @@ class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState>
     final appConfig = AppConfig();
     final apiClient =
         openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    final authState = read(authStateProvider.state);
     apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
-        state.authToken.accessToken;
+        authState.token.accessToken;
     final tasksApi = openapi.TasksApi(apiClient);
     final taskFormSchema = openapi.TaskFormSchema()
       ..title = taskForm.title

@@ -1,36 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_form_fields.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
-import 'package:todo_flutter_sample/models/task.dart';
 import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
-import 'package:todo_flutter_sample/states/task/task_form_state.dart';
-import 'package:todo_flutter_sample/states/task/task_update_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class TaskEditBody extends StatefulWidget {
-  @override
-  _TaskEditBodyState createState() => _TaskEditBodyState();
-}
-
-class _TaskEditBodyState extends State<TaskEditBody> {
+class TaskEditBody extends HookWidget {
   final _formKey = GlobalKey<FormState>();
   final _appConfig = AppConfig();
 
   @override
   Widget build(BuildContext context) {
-    final task = context.select<TaskDetailState, Task>((state) => state.task);
-    final taskForm =
-        context.select<TaskFormState, TaskForm>((state) => state.taskForm);
-    final isFetching =
-        context.select<TaskDetailState, bool>((state) => state.isFetching);
-    final isUpdating =
-        context.select<TaskUpdateState, bool>((state) => state.isUpdating);
+    final isInitialized = useState(false);
+    final taskForm = useState(const TaskForm());
+    final taskDetailState = useProvider(taskDetailStateProvider.state);
+    final taskUpdateStateNotifier = useProvider(taskUpdateStateProvider);
+    final taskUpdateState = useProvider(taskUpdateStateProvider.state);
+    final task = taskDetailState.task;
+    final isFetching = taskDetailState.isFetching;
+    final isUpdating = taskUpdateState.isUpdating;
+
+    useEffect(() {
+      taskForm.value = TaskForm.fromJson(task.toJson());
+      isInitialized.value = true;
+      return () {};
+    }, []);
+
+    if (!isInitialized.value) {
+      return Container();
+    }
 
     if (isFetching || isUpdating) {
       return CenterCircularProgressIndicator();
+    }
+
+    void handleChangeTitle(String value) {
+      taskForm.value = taskForm.value.copyWith(title: value);
+    }
+
+    void handleChangeDescription(String value) {
+      taskForm.value = taskForm.value.copyWith(description: value);
+    }
+
+    // ignore: avoid_positional_boolean_parameters
+    void handleChangeDone(bool value) {
+      taskForm.value = taskForm.value.copyWith(done: value);
     }
 
     return Form(
@@ -38,7 +55,8 @@ class _TaskEditBodyState extends State<TaskEditBody> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              TaskFormFields(),
+              TaskFormFields(taskForm.value, handleChangeTitle,
+                  handleChangeDescription, handleChangeDone),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(children: <Widget>[
@@ -47,9 +65,8 @@ class _TaskEditBodyState extends State<TaskEditBody> {
                         child: RaisedButton(
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              final taskUpdateState = await context
-                                  .read<TaskUpdateStateNotifier>()
-                                  .updateTask(task.id, taskForm);
+                              await taskUpdateStateNotifier.updateTask(
+                                  task.id, taskForm.value);
                               if (!taskUpdateState.isError) {
                                 Navigator.of(context).pop();
                                 await Fluttertoast.showToast(

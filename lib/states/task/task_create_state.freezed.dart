@@ -17,15 +17,11 @@ class _$TaskCreateStateTearOff {
 
 // ignore: unused_element
   _TaskCreateState call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isCreating = false,
+      {bool isCreating = false,
       bool isError = false,
       int errorStatusCode = 0,
       String errorBody = ''}) {
     return _TaskCreateState(
-      authToken: authToken,
-      authUser: authUser,
       isCreating: isCreating,
       isError: isError,
       errorStatusCode: errorStatusCode,
@@ -38,8 +34,6 @@ class _$TaskCreateStateTearOff {
 const $TaskCreateState = _$TaskCreateStateTearOff();
 
 mixin _$TaskCreateState {
-  OAuth2Token get authToken;
-  User get authUser;
   bool get isCreating;
   bool get isError;
   int get errorStatusCode;
@@ -54,12 +48,7 @@ abstract class $TaskCreateStateCopyWith<$Res> {
           TaskCreateState value, $Res Function(TaskCreateState) then) =
       _$TaskCreateStateCopyWithImpl<$Res>;
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isCreating,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      {bool isCreating, bool isError, int errorStatusCode, String errorBody});
 }
 
 class _$TaskCreateStateCopyWithImpl<$Res>
@@ -72,17 +61,12 @@ class _$TaskCreateStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object isCreating = freezed,
     Object isError = freezed,
     Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       isCreating:
           isCreating == freezed ? _value.isCreating : isCreating as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
@@ -101,12 +85,7 @@ abstract class _$TaskCreateStateCopyWith<$Res>
       __$TaskCreateStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isCreating,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      {bool isCreating, bool isError, int errorStatusCode, String errorBody});
 }
 
 class __$TaskCreateStateCopyWithImpl<$Res>
@@ -121,17 +100,12 @@ class __$TaskCreateStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authToken = freezed,
-    Object authUser = freezed,
     Object isCreating = freezed,
     Object isError = freezed,
     Object errorStatusCode = freezed,
     Object errorBody = freezed,
   }) {
     return _then(_TaskCreateState(
-      authToken:
-          authToken == freezed ? _value.authToken : authToken as OAuth2Token,
-      authUser: authUser == freezed ? _value.authUser : authUser as User,
       isCreating:
           isCreating == freezed ? _value.isCreating : isCreating as bool,
       isError: isError == freezed ? _value.isError : isError as bool,
@@ -146,9 +120,7 @@ class __$TaskCreateStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TaskCreateState implements _TaskCreateState {
   const _$_TaskCreateState(
-      {this.authToken,
-      this.authUser,
-      this.isCreating = false,
+      {this.isCreating = false,
       this.isError = false,
       this.errorStatusCode = 0,
       this.errorBody = ''})
@@ -160,10 +132,6 @@ class _$_TaskCreateState implements _TaskCreateState {
   factory _$_TaskCreateState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskCreateStateFromJson(json);
 
-  @override
-  final OAuth2Token authToken;
-  @override
-  final User authUser;
   @JsonKey(defaultValue: false)
   @override
   final bool isCreating;
@@ -179,19 +147,13 @@ class _$_TaskCreateState implements _TaskCreateState {
 
   @override
   String toString() {
-    return 'TaskCreateState(authToken: $authToken, authUser: $authUser, isCreating: $isCreating, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskCreateState(isCreating: $isCreating, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _TaskCreateState &&
-            (identical(other.authToken, authToken) ||
-                const DeepCollectionEquality()
-                    .equals(other.authToken, authToken)) &&
-            (identical(other.authUser, authUser) ||
-                const DeepCollectionEquality()
-                    .equals(other.authUser, authUser)) &&
             (identical(other.isCreating, isCreating) ||
                 const DeepCollectionEquality()
                     .equals(other.isCreating, isCreating)) &&
@@ -209,8 +171,6 @@ class _$_TaskCreateState implements _TaskCreateState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(authToken) ^
-      const DeepCollectionEquality().hash(authUser) ^
       const DeepCollectionEquality().hash(isCreating) ^
       const DeepCollectionEquality().hash(isError) ^
       const DeepCollectionEquality().hash(errorStatusCode) ^
@@ -228,9 +188,7 @@ class _$_TaskCreateState implements _TaskCreateState {
 
 abstract class _TaskCreateState implements TaskCreateState {
   const factory _TaskCreateState(
-      {OAuth2Token authToken,
-      User authUser,
-      bool isCreating,
+      {bool isCreating,
       bool isError,
       int errorStatusCode,
       String errorBody}) = _$_TaskCreateState;
@@ -238,10 +196,6 @@ abstract class _TaskCreateState implements TaskCreateState {
   factory _TaskCreateState.fromJson(Map<String, dynamic> json) =
       _$_TaskCreateState.fromJson;
 
-  @override
-  OAuth2Token get authToken;
-  @override
-  User get authUser;
   @override
   bool get isCreating;
   @override

@@ -1,48 +1,32 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_flutter_sample/components/organisms/task_edit_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
-import 'package:todo_flutter_sample/models/task_form.dart';
-import 'package:todo_flutter_sample/states/task/task_detail_state.dart';
-import 'package:todo_flutter_sample/states/task/task_form_state.dart';
-import 'package:todo_flutter_sample/states/task/task_update_state.dart';
+import 'package:todo_flutter_sample/states/state_provider.dart';
 
-class TaskEditPage extends StatefulWidget {
+class TaskEditPage extends HookWidget {
   static String routeName = '/task/edit';
 
   @override
-  _TaskEditPageState createState() => _TaskEditPageState();
-}
-
-class _TaskEditPageState extends State<TaskEditPage> {
-  bool isInitialized = false;
-  TaskEditArguments arguments;
-
-  @override
   Widget build(BuildContext context) {
-    if (isInitialized == false) {
-      arguments =
-          ModalRoute.of(context).settings.arguments as TaskEditArguments;
-      Timer.run(() async {
-        context.read<TaskFormStateNotifier>().clear();
-        context.read<TaskUpdateStateNotifier>().clear();
-        setState(() {
-          isInitialized = true;
-        });
+    final isInitialized = useState(false);
+    final arguments = useState<TaskEditArguments>(null);
+    final taskDetailStateNotifier = useProvider(taskDetailStateProvider);
+    final taskUpdateStateNotifier = useProvider(taskUpdateStateProvider);
 
-        final taskDetailState = await context
-            .read<TaskDetailStateNotifier>()
-            .fetchTaskById(arguments.id);
-        final task = taskDetailState.task;
-        if (task != null) {
-          context
-              .read<TaskFormStateNotifier>()
-              .setTaskForm(TaskForm.fromJson(task.toJson()));
-        }
+    useEffect(() {
+      Timer.run(() async {
+        arguments.value =
+            ModalRoute.of(context).settings.arguments as TaskEditArguments;
+        taskUpdateStateNotifier.clear();
+        await taskDetailStateNotifier.fetchTaskById(arguments.value.id);
+        isInitialized.value = true;
       });
-    }
+      return () {};
+    }, []);
 
     const title = 'Edit Task';
 
@@ -50,7 +34,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
       appBar: AppBar(
         title: const Text(title),
       ),
-      body: PageTemplate(body: isInitialized ? TaskEditBody() : Container()),
+      body: PageTemplate(
+          body: isInitialized.value ? TaskEditBody() : Container()),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart' as openapi;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:state_notifier/state_notifier.dart';
@@ -31,17 +32,11 @@ abstract class AuthState with _$AuthState {
   }
 }
 
-class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
-  AuthStateNotifier() : super(const AuthState());
+class AuthStateNotifier extends StateNotifier<AuthState> {
+  AuthStateNotifier(this.reader) : super(const AuthState());
 
+  final Reader reader;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  @override
-  void initState() {
-    super.initState();
-    initializeToken();
-    initializeUser();
-  }
 
   Future<void> initializeToken() async {
     final token = await _prefs.then((prefs) {
@@ -168,6 +163,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
       try {
         final response = await usersApi.apiV1MeGet();
         setUser(User.fromJson(response.toJson()));
+        setToken(fetchedToken);
       } on openapi.ApiException catch (error) {
         setIsError(true);
         setErrorStatusCode(error.code);
@@ -189,7 +185,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
     return completer.future;
   }
 
-  Future<AuthState> fetchTokenAndUserByUsernameAndCode(
+  Future<AuthState> fetchTokenAndUserByUsernameAndPassword(
       String username, String password) async {
     final completer = Completer<AuthState>();
 
@@ -226,6 +222,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> with LocatorMixin {
       try {
         final response = await usersApi.apiV1MeGet();
         setUser(User.fromJson(response.toJson()));
+        setToken(fetchedToken);
       } on openapi.ApiException catch (error) {
         setIsError(true);
         setErrorStatusCode(error.code);
