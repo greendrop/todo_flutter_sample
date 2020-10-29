@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/sign_in_form_fields.dart';
-import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/models/sign_in_form.dart';
 import 'package:todo_flutter_sample/pages/home_page.dart';
 import 'package:todo_flutter_sample/states/state_provider.dart';
 
 class SignInBody extends HookWidget {
-  final _appConfig = AppConfig();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -47,21 +45,15 @@ class SignInBody extends HookWidget {
                         child: RaisedButton(
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              await authStateNotifier
-                                  .fetchTokenAndUserByUsernameAndPassword(
-                                      signInForm.value.email,
-                                      signInForm.value.password);
+                              try {
+                                await authStateNotifier
+                                    .fetchTokenAndUserByUsernameAndPassword(
+                                        signInForm.value.email,
+                                        signInForm.value.password);
 
-                              if (!authState.isError) {
-                                await Fluttertoast.showToast(
-                                  msg: 'Signed in.',
-                                  backgroundColor:
-                                      _appConfig.toastBackgroundColor,
-                                  textColor: _appConfig.toastTextColor,
-                                );
                                 await Navigator.of(context)
                                     .pushReplacementNamed(HomePage.routeName);
-                              }
+                              } on openapi.ApiException catch (_) {}
                             }
                           },
                           child: const Text('SIGN IN'),

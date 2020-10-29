@@ -16,9 +16,6 @@ abstract class TaskDetailState with _$TaskDetailState {
   const factory TaskDetailState({
     Task task,
     @Default(false) bool isFetching,
-    @Default(false) bool isError,
-    @Default(0) int errorStatusCode,
-    @Default('') String errorBody,
   }) = _TaskDetailState;
   factory TaskDetailState.fromJson(Map<String, dynamic> json) {
     return _$TaskDetailStateFromJson(json);
@@ -30,43 +27,25 @@ class TaskDetailStateNotifier extends StateNotifier<TaskDetailState> {
 
   final Reader read;
 
-  TaskDetailState setTask(Task task) {
-    return state = state.copyWith(task: task);
+  void setTask(Task task) {
+    state = state.copyWith(task: task);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  TaskDetailState setIsFetching(bool isFetching) {
-    return state = state.copyWith(isFetching: isFetching);
+  void setIsFetching(bool isFetching) {
+    state = state.copyWith(isFetching: isFetching);
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  TaskDetailState setIsError(bool isError) {
-    return state = state.copyWith(isError: isError);
-  }
-
-  TaskDetailState setErrorStatusCode(int errorStatusCode) {
-    return state = state.copyWith(errorStatusCode: errorStatusCode);
-  }
-
-  TaskDetailState setErrorBody(String errorBody) {
-    return state = state.copyWith(errorBody: errorBody);
-  }
-
-  TaskDetailState clear() {
+  void clear() {
     setTask(null);
     setIsFetching(false);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
-    return state;
   }
 
-  Future<TaskDetailState> fetchTaskById(int id) async {
-    final completer = Completer<TaskDetailState>();
+  Future<void> fetchTaskById(int id) async {
+    final completer = Completer<void>();
 
     setTask(null);
     setIsFetching(true);
-    setIsError(false);
 
     final appConfig = AppConfig();
     final apiClient =
@@ -76,17 +55,11 @@ class TaskDetailStateNotifier extends StateNotifier<TaskDetailState> {
         authState.token.accessToken;
     final tasksApi = openapi.TasksApi(apiClient);
 
-    try {
-      final response = await tasksApi.apiV1TasksIdGet(id);
-      setTask(Task.fromJson(response.toJson()));
-    } on openapi.ApiException catch (error) {
-      setIsError(true);
-      setErrorStatusCode(error.code);
-      setErrorBody(error.message);
-    }
-
+    final response = await tasksApi.apiV1TasksIdGet(id);
+    setTask(Task.fromJson(response.toJson()));
     setIsFetching(false);
-    completer.complete(state);
+
+    completer.complete();
     return completer.future;
   }
 }

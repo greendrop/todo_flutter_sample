@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:todo_flutter_sample/components/organisms/task_edit_body.dart';
 import 'package:todo_flutter_sample/components/templates/page_template.dart';
 import 'package:todo_flutter_sample/states/state_provider.dart';
@@ -22,7 +23,9 @@ class TaskEditPage extends HookWidget {
         arguments.value =
             ModalRoute.of(context).settings.arguments as TaskEditArguments;
         taskUpdateStateNotifier.clear();
-        await taskDetailStateNotifier.fetchTaskById(arguments.value.id);
+        try {
+          await taskDetailStateNotifier.fetchTaskById(arguments.value.id);
+        } on openapi.ApiException catch (_) {}
         isInitialized.value = true;
       });
       return () {};

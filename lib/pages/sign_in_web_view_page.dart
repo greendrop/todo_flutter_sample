@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:todo_flutter_sample/components/organisms/drawer_content.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
 import 'package:todo_flutter_sample/helpers/oauth2_client.dart';
@@ -22,7 +23,6 @@ class SignInWebViewPage extends HookWidget {
     final controllerCompleter = Completer<WebViewController>();
     final oauth2Client = OAuth2Client();
     final authStateNotifier = useProvider(authStateProvider);
-    final authState = useProvider(authStateProvider.state);
 
     return WillPopScope(
       onWillPop: () async {
@@ -53,17 +53,18 @@ class SignInWebViewPage extends HookWidget {
                 if (oauth2Client.isRedirectUrlWithCode(url)) {
                   final code = OAuth2Client().getCodeFromUrl(url);
 
-                  await authStateNotifier.fetchTokenAndUserByCode(code);
+                  try {
+                    await authStateNotifier.fetchTokenAndUserByCode(code);
 
-                  if (!authState.isError) {
                     await Fluttertoast.showToast(
                       msg: 'Signed in.',
                       backgroundColor: _appConfig.toastBackgroundColor,
                       textColor: _appConfig.toastTextColor,
                     );
+
                     await Navigator.of(context)
                         .pushReplacementNamed(HomePage.routeName);
-                  }
+                  } on openapi.ApiException catch (_) {}
                 }
               },
             );

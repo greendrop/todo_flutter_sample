@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:openapi/api.dart' as openapi;
 import 'package:todo_flutter_sample/components/atoms/center_circular_progress_indicator.dart';
 import 'package:todo_flutter_sample/components/molecules/task_form_fields.dart';
 import 'package:todo_flutter_sample/config/app_config.dart';
@@ -51,18 +52,19 @@ class TaskNewBody extends HookWidget {
                         child: RaisedButton(
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              await taskCreateStateNotifier
-                                  .createTask(taskForm.value);
+                              try {
+                                await taskCreateStateNotifier
+                                    .createTask(taskForm.value);
 
-                              if (!taskCreateState.isError) {
                                 Navigator.of(context).pop();
+
                                 await Fluttertoast.showToast(
                                   msg: 'Created Task.',
                                   backgroundColor:
                                       _appConfig.toastBackgroundColor,
                                   textColor: _appConfig.toastTextColor,
                                 );
-                              }
+                              } on openapi.ApiException catch (_) {}
                             }
                           },
                           child: const Text('CREATE'),

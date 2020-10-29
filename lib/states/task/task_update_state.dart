@@ -15,9 +15,6 @@ part 'task_update_state.g.dart';
 abstract class TaskUpdateState with _$TaskUpdateState {
   const factory TaskUpdateState({
     @Default(false) bool isUpdating,
-    @Default(false) bool isError,
-    @Default(0) int errorStatusCode,
-    @Default('') String errorBody,
   }) = _TaskUpdateState;
   factory TaskUpdateState.fromJson(Map<String, dynamic> json) {
     return _$TaskUpdateStateFromJson(json);
@@ -30,36 +27,18 @@ class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState> {
   final Reader read;
 
   // ignore: avoid_positional_boolean_parameters
-  TaskUpdateState setIsUpdating(bool isUpdating) {
-    return state = state.copyWith(isUpdating: isUpdating);
+  void setIsUpdating(bool isUpdating) {
+    state = state.copyWith(isUpdating: isUpdating);
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  TaskUpdateState setIsError(bool isError) {
-    return state = state.copyWith(isError: isError);
-  }
-
-  TaskUpdateState setErrorStatusCode(int errorStatusCode) {
-    return state = state.copyWith(errorStatusCode: errorStatusCode);
-  }
-
-  TaskUpdateState setErrorBody(String errorBody) {
-    return state = state.copyWith(errorBody: errorBody);
-  }
-
-  TaskUpdateState clear() {
+  void clear() {
     setIsUpdating(false);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
-    return state;
   }
 
-  Future<TaskUpdateState> updateTask(int id, TaskForm taskForm) async {
-    final completer = Completer<TaskUpdateState>();
+  Future<void> updateTask(int id, TaskForm taskForm) async {
+    final completer = Completer<void>();
 
     setIsUpdating(true);
-    setIsError(false);
 
     final appConfig = AppConfig();
     final apiClient =
@@ -74,16 +53,10 @@ class TaskUpdateStateNotifier extends StateNotifier<TaskUpdateState> {
       ..done = taskForm.done;
     final taskUpdateSchema = openapi.TaskUpdateSchema()..task = taskFormSchema;
 
-    try {
-      await tasksApi.apiV1TasksIdPatch(id, taskUpdateSchema: taskUpdateSchema);
-    } on openapi.ApiException catch (error) {
-      setIsError(true);
-      setErrorStatusCode(error.code);
-      setErrorBody(error.message);
-    }
-
+    await tasksApi.apiV1TasksIdPatch(id, taskUpdateSchema: taskUpdateSchema);
     setIsUpdating(false);
-    completer.complete(state);
+
+    completer.complete();
     return completer.future;
   }
 }
