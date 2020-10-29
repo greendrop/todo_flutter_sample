@@ -16,16 +16,9 @@ class _$TaskDeleteStateTearOff {
   const _$TaskDeleteStateTearOff();
 
 // ignore: unused_element
-  _TaskDeleteState call(
-      {bool isDeleting = false,
-      bool isError = false,
-      int errorStatusCode = 0,
-      String errorBody = ''}) {
+  _TaskDeleteState call({bool isDeleting = false}) {
     return _TaskDeleteState(
       isDeleting: isDeleting,
-      isError: isError,
-      errorStatusCode: errorStatusCode,
-      errorBody: errorBody,
     );
   }
 }
@@ -35,9 +28,6 @@ const $TaskDeleteState = _$TaskDeleteStateTearOff();
 
 mixin _$TaskDeleteState {
   bool get isDeleting;
-  bool get isError;
-  int get errorStatusCode;
-  String get errorBody;
 
   Map<String, dynamic> toJson();
   $TaskDeleteStateCopyWith<TaskDeleteState> get copyWith;
@@ -47,8 +37,7 @@ abstract class $TaskDeleteStateCopyWith<$Res> {
   factory $TaskDeleteStateCopyWith(
           TaskDeleteState value, $Res Function(TaskDeleteState) then) =
       _$TaskDeleteStateCopyWithImpl<$Res>;
-  $Res call(
-      {bool isDeleting, bool isError, int errorStatusCode, String errorBody});
+  $Res call({bool isDeleting});
 }
 
 class _$TaskDeleteStateCopyWithImpl<$Res>
@@ -62,18 +51,10 @@ class _$TaskDeleteStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object isDeleting = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
       isDeleting:
           isDeleting == freezed ? _value.isDeleting : isDeleting as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 }
@@ -84,8 +65,7 @@ abstract class _$TaskDeleteStateCopyWith<$Res>
           _TaskDeleteState value, $Res Function(_TaskDeleteState) then) =
       __$TaskDeleteStateCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {bool isDeleting, bool isError, int errorStatusCode, String errorBody});
+  $Res call({bool isDeleting});
 }
 
 class __$TaskDeleteStateCopyWithImpl<$Res>
@@ -101,33 +81,18 @@ class __$TaskDeleteStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object isDeleting = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_TaskDeleteState(
       isDeleting:
           isDeleting == freezed ? _value.isDeleting : isDeleting as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_TaskDeleteState implements _TaskDeleteState {
-  const _$_TaskDeleteState(
-      {this.isDeleting = false,
-      this.isError = false,
-      this.errorStatusCode = 0,
-      this.errorBody = ''})
-      : assert(isDeleting != null),
-        assert(isError != null),
-        assert(errorStatusCode != null),
-        assert(errorBody != null);
+  const _$_TaskDeleteState({this.isDeleting = false})
+      : assert(isDeleting != null);
 
   factory _$_TaskDeleteState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskDeleteStateFromJson(json);
@@ -135,19 +100,10 @@ class _$_TaskDeleteState implements _TaskDeleteState {
   @JsonKey(defaultValue: false)
   @override
   final bool isDeleting;
-  @JsonKey(defaultValue: false)
-  @override
-  final bool isError;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int errorStatusCode;
-  @JsonKey(defaultValue: '')
-  @override
-  final String errorBody;
 
   @override
   String toString() {
-    return 'TaskDeleteState(isDeleting: $isDeleting, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskDeleteState(isDeleting: $isDeleting)';
   }
 
   @override
@@ -156,25 +112,12 @@ class _$_TaskDeleteState implements _TaskDeleteState {
         (other is _TaskDeleteState &&
             (identical(other.isDeleting, isDeleting) ||
                 const DeepCollectionEquality()
-                    .equals(other.isDeleting, isDeleting)) &&
-            (identical(other.isError, isError) ||
-                const DeepCollectionEquality()
-                    .equals(other.isError, isError)) &&
-            (identical(other.errorStatusCode, errorStatusCode) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorStatusCode, errorStatusCode)) &&
-            (identical(other.errorBody, errorBody) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorBody, errorBody)));
+                    .equals(other.isDeleting, isDeleting)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(isDeleting) ^
-      const DeepCollectionEquality().hash(isError) ^
-      const DeepCollectionEquality().hash(errorStatusCode) ^
-      const DeepCollectionEquality().hash(errorBody);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(isDeleting);
 
   @override
   _$TaskDeleteStateCopyWith<_TaskDeleteState> get copyWith =>
@@ -187,23 +130,13 @@ class _$_TaskDeleteState implements _TaskDeleteState {
 }
 
 abstract class _TaskDeleteState implements TaskDeleteState {
-  const factory _TaskDeleteState(
-      {bool isDeleting,
-      bool isError,
-      int errorStatusCode,
-      String errorBody}) = _$_TaskDeleteState;
+  const factory _TaskDeleteState({bool isDeleting}) = _$_TaskDeleteState;
 
   factory _TaskDeleteState.fromJson(Map<String, dynamic> json) =
       _$_TaskDeleteState.fromJson;
 
   @override
   bool get isDeleting;
-  @override
-  bool get isError;
-  @override
-  int get errorStatusCode;
-  @override
-  String get errorBody;
   @override
   _$TaskDeleteStateCopyWith<_TaskDeleteState> get copyWith;
 }

@@ -21,10 +21,6 @@ abstract class AuthState with _$AuthState {
     OAuth2Token token,
     User user,
     @Default(false) bool isFetching,
-    @Default(false) bool isUnauthorized,
-    @Default(false) bool isError,
-    @Default(0) int errorStatusCode,
-    @Default('') String errorBody,
     @Default(false) bool isRefreshFetching,
   }) = _AuthState;
   factory AuthState.fromJson(Map<String, dynamic> json) {
@@ -79,209 +75,142 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         'authUser', user == null ? '' : json.encode(user.toJson()));
   }
 
-  AuthState setToken(OAuth2Token token) {
+  void setToken(OAuth2Token token) {
     setTokenToPrefs(token);
-    return state = state.copyWith(token: token);
+    state = state.copyWith(token: token);
   }
 
-  AuthState setUser(User user) {
+  void setUser(User user) {
     setUserToPrefs(user);
-    return state = state.copyWith(user: user);
+    state = state.copyWith(user: user);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  AuthState setIsFetching(bool isFetching) {
-    return state = state.copyWith(isFetching: isFetching);
+  void setIsFetching(bool isFetching) {
+    state = state.copyWith(isFetching: isFetching);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  AuthState setIsUnauthorized(bool isUnauthorized) {
-    return state = state.copyWith(isUnauthorized: isUnauthorized);
+  void setIsRefreshFetching(bool isRefreshFetching) {
+    state = state.copyWith(isRefreshFetching: isRefreshFetching);
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  AuthState setIsError(bool isError) {
-    return state = state.copyWith(isError: isError);
-  }
-
-  AuthState setErrorStatusCode(int errorStatusCode) {
-    return state = state.copyWith(errorStatusCode: errorStatusCode);
-  }
-
-  AuthState setErrorBody(String errorBody) {
-    return state = state.copyWith(errorBody: errorBody);
-  }
-
-  // ignore: avoid_positional_boolean_parameters
-  AuthState setIsRefreshFetching(bool isRefreshFetching) {
-    return state = state.copyWith(isRefreshFetching: isRefreshFetching);
-  }
-
-  AuthState clear() {
+  void clear() {
     setToken(null);
     setUser(null);
     setIsFetching(false);
-    setIsUnauthorized(false);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
-    return state;
   }
 
-  Future<AuthState> fetchTokenAndUserByCode(String code) async {
-    final completer = Completer<AuthState>();
+  Future<void> fetchTokenAndUserByCode(String code) async {
+    final completer = Completer<void>();
 
     setIsFetching(true);
-    setIsUnauthorized(false);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
 
     final oauth2Client = OAuth2Client();
     final accessTokenResponse = await oauth2Client.getAccessTokenByCode(code);
 
-    if (accessTokenResponse.statusCode >= 200 &&
-        accessTokenResponse.statusCode < 300) {
-      final body =
-          json.decode(accessTokenResponse.body) as Map<String, dynamic>;
-      body['expires_at'] = DateTime.fromMicrosecondsSinceEpoch(
-              ((body['created_at'] as int) + (body['expires_in'] as int)) *
-                  1000000)
-          .toIso8601String();
-      body['created_at'] = DateTime.fromMicrosecondsSinceEpoch(
-              (body['created_at'] as int) * 1000000)
-          .toIso8601String();
-      final fetchedToken = OAuth2Token.fromJson(body);
-
-      final appConfig = AppConfig();
-      final apiClient =
-          openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
-      apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
-          fetchedToken.accessToken;
-      final usersApi = openapi.UsersApi(apiClient);
-
-      try {
-        final response = await usersApi.apiV1MeGet();
-        setUser(User.fromJson(response.toJson()));
-        setToken(fetchedToken);
-      } on openapi.ApiException catch (error) {
-        setIsError(true);
-        setErrorStatusCode(error.code);
-        setErrorBody(error.message);
-        if (error.code == 401) {
-          setIsUnauthorized(true);
-        }
-      }
-    } else {
-      setIsError(true);
-      setErrorStatusCode(accessTokenResponse.statusCode);
-      setErrorBody(accessTokenResponse.body);
-      if (accessTokenResponse.statusCode == 401) {
-        setIsUnauthorized(true);
-      }
+    if (!(accessTokenResponse.statusCode >= 200 &&
+        accessTokenResponse.statusCode < 300)) {
+      throw openapi.ApiException(
+          accessTokenResponse.statusCode, accessTokenResponse.body);
     }
+
+    final body = json.decode(accessTokenResponse.body) as Map<String, dynamic>;
+    body['expires_at'] = DateTime.fromMicrosecondsSinceEpoch(
+            ((body['created_at'] as int) + (body['expires_in'] as int)) *
+                1000000)
+        .toIso8601String();
+    body['created_at'] = DateTime.fromMicrosecondsSinceEpoch(
+            (body['created_at'] as int) * 1000000)
+        .toIso8601String();
+    final fetchedToken = OAuth2Token.fromJson(body);
+
+    final appConfig = AppConfig();
+    final apiClient =
+        openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+        fetchedToken.accessToken;
+    final usersApi = openapi.UsersApi(apiClient);
+    final response = await usersApi.apiV1MeGet();
+    setUser(User.fromJson(response.toJson()));
+    setToken(fetchedToken);
     setIsFetching(false);
-    completer.complete(state);
+
+    completer.complete();
     return completer.future;
   }
 
-  Future<AuthState> fetchTokenAndUserByUsernameAndPassword(
+  Future<void> fetchTokenAndUserByUsernameAndPassword(
       String username, String password) async {
-    final completer = Completer<AuthState>();
+    final completer = Completer<void>();
 
     setIsFetching(true);
-    setIsUnauthorized(false);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
 
     final oauth2Client = OAuth2Client();
     final accessTokenResponse = await oauth2Client
         .getAccessTokenByUsernameAndPassword(username, password);
 
-    if (accessTokenResponse.statusCode >= 200 &&
-        accessTokenResponse.statusCode < 300) {
-      final body =
-          json.decode(accessTokenResponse.body) as Map<String, dynamic>;
-      body['expires_at'] = DateTime.fromMicrosecondsSinceEpoch(
-              ((body['created_at'] as int) + (body['expires_in'] as int)) *
-                  1000000)
-          .toIso8601String();
-      body['created_at'] = DateTime.fromMicrosecondsSinceEpoch(
-              (body['created_at'] as int) * 1000000)
-          .toIso8601String();
-      final fetchedToken = OAuth2Token.fromJson(body);
-
-      final appConfig = AppConfig();
-      final apiClient =
-          openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
-      apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
-          fetchedToken.accessToken;
-      final usersApi = openapi.UsersApi(apiClient);
-
-      try {
-        final response = await usersApi.apiV1MeGet();
-        setUser(User.fromJson(response.toJson()));
-        setToken(fetchedToken);
-      } on openapi.ApiException catch (error) {
-        setIsError(true);
-        setErrorStatusCode(error.code);
-        setErrorBody(error.message);
-        if (error.code == 401) {
-          setIsUnauthorized(true);
-        }
-      }
-    } else {
-      setIsError(true);
-      setErrorStatusCode(accessTokenResponse.statusCode);
-      setErrorBody(accessTokenResponse.body);
-      if (accessTokenResponse.statusCode == 401) {
-        setIsUnauthorized(true);
-      }
+    if (!(accessTokenResponse.statusCode >= 200 &&
+        accessTokenResponse.statusCode < 300)) {
+      throw openapi.ApiException(
+          accessTokenResponse.statusCode, accessTokenResponse.body);
     }
+
+    final body = json.decode(accessTokenResponse.body) as Map<String, dynamic>;
+    body['expires_at'] = DateTime.fromMicrosecondsSinceEpoch(
+            ((body['created_at'] as int) + (body['expires_in'] as int)) *
+                1000000)
+        .toIso8601String();
+    body['created_at'] = DateTime.fromMicrosecondsSinceEpoch(
+            (body['created_at'] as int) * 1000000)
+        .toIso8601String();
+    final fetchedToken = OAuth2Token.fromJson(body);
+
+    final appConfig = AppConfig();
+    final apiClient =
+        openapi.ApiClient(basePath: appConfig.envConfig.apiBaseUrl);
+    apiClient.getAuthentication<openapi.OAuth>('oauth2').accessToken =
+        fetchedToken.accessToken;
+    final usersApi = openapi.UsersApi(apiClient);
+    final response = await usersApi.apiV1MeGet();
+    setUser(User.fromJson(response.toJson()));
+    setToken(fetchedToken);
     setIsFetching(false);
-    completer.complete(state);
+
+    completer.complete();
     return completer.future;
   }
 
-  Future<AuthState> fetchTokenByRefreshToken(String refreshToken) async {
-    final completer = Completer<AuthState>();
+  Future<void> fetchTokenByRefreshToken(String refreshToken) async {
+    final completer = Completer<void>();
 
     if (state.isRefreshFetching) {
-      completer.complete(state);
+      completer.complete();
       return completer.future;
     }
 
     setIsRefreshFetching(true);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
 
     final oauth2Client = OAuth2Client();
     final response =
         await oauth2Client.getAccessTokenByRefreshToken(refreshToken);
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final body = json.decode(response.body) as Map<String, dynamic>;
-      body['expires_at'] = DateTime.fromMicrosecondsSinceEpoch(
-              ((body['created_at'] as int) + (body['expires_in'] as int)) *
-                  1000000)
-          .toIso8601String();
-      body['created_at'] = DateTime.fromMicrosecondsSinceEpoch(
-              (body['created_at'] as int) * 1000000)
-          .toIso8601String();
-      final fetchedToken = OAuth2Token.fromJson(body);
-      setToken(fetchedToken);
-    } else {
-      setIsError(true);
-      setErrorStatusCode(response.statusCode);
-      setErrorBody(response.body);
-      if (response.statusCode == 401) {
-        setIsUnauthorized(true);
-      }
+    if (!(response.statusCode >= 200 && response.statusCode < 300)) {
+      throw openapi.ApiException(response.statusCode, response.body);
     }
 
-    completer.complete(state);
+    final body = json.decode(response.body) as Map<String, dynamic>;
+    body['expires_at'] = DateTime.fromMicrosecondsSinceEpoch(
+            ((body['created_at'] as int) + (body['expires_in'] as int)) *
+                1000000)
+        .toIso8601String();
+    body['created_at'] = DateTime.fromMicrosecondsSinceEpoch(
+            (body['created_at'] as int) * 1000000)
+        .toIso8601String();
+    final fetchedToken = OAuth2Token.fromJson(body);
+    setToken(fetchedToken);
+
+    completer.complete();
     return completer.future;
   }
 
@@ -291,10 +220,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  AuthState signOut() {
+  void signOut() {
     setToken(null);
     setUser(null);
-    setIsUnauthorized(false);
-    return state;
   }
 }

@@ -20,19 +20,11 @@ class _$AuthStateTearOff {
       {OAuth2Token token,
       User user,
       bool isFetching = false,
-      bool isUnauthorized = false,
-      bool isError = false,
-      int errorStatusCode = 0,
-      String errorBody = '',
       bool isRefreshFetching = false}) {
     return _AuthState(
       token: token,
       user: user,
       isFetching: isFetching,
-      isUnauthorized: isUnauthorized,
-      isError: isError,
-      errorStatusCode: errorStatusCode,
-      errorBody: errorBody,
       isRefreshFetching: isRefreshFetching,
     );
   }
@@ -45,10 +37,6 @@ mixin _$AuthState {
   OAuth2Token get token;
   User get user;
   bool get isFetching;
-  bool get isUnauthorized;
-  bool get isError;
-  int get errorStatusCode;
-  String get errorBody;
   bool get isRefreshFetching;
 
   Map<String, dynamic> toJson();
@@ -59,14 +47,7 @@ abstract class $AuthStateCopyWith<$Res> {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) then) =
       _$AuthStateCopyWithImpl<$Res>;
   $Res call(
-      {OAuth2Token token,
-      User user,
-      bool isFetching,
-      bool isUnauthorized,
-      bool isError,
-      int errorStatusCode,
-      String errorBody,
-      bool isRefreshFetching});
+      {OAuth2Token token, User user, bool isFetching, bool isRefreshFetching});
 
   $OAuth2TokenCopyWith<$Res> get token;
   $UserCopyWith<$Res> get user;
@@ -84,10 +65,6 @@ class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
     Object token = freezed,
     Object user = freezed,
     Object isFetching = freezed,
-    Object isUnauthorized = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
     Object isRefreshFetching = freezed,
   }) {
     return _then(_value.copyWith(
@@ -95,14 +72,6 @@ class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
       user: user == freezed ? _value.user : user as User,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
-      isUnauthorized: isUnauthorized == freezed
-          ? _value.isUnauthorized
-          : isUnauthorized as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
       isRefreshFetching: isRefreshFetching == freezed
           ? _value.isRefreshFetching
           : isRefreshFetching as bool,
@@ -136,14 +105,7 @@ abstract class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
       __$AuthStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {OAuth2Token token,
-      User user,
-      bool isFetching,
-      bool isUnauthorized,
-      bool isError,
-      int errorStatusCode,
-      String errorBody,
-      bool isRefreshFetching});
+      {OAuth2Token token, User user, bool isFetching, bool isRefreshFetching});
 
   @override
   $OAuth2TokenCopyWith<$Res> get token;
@@ -164,10 +126,6 @@ class __$AuthStateCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
     Object token = freezed,
     Object user = freezed,
     Object isFetching = freezed,
-    Object isUnauthorized = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
     Object isRefreshFetching = freezed,
   }) {
     return _then(_AuthState(
@@ -175,14 +133,6 @@ class __$AuthStateCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
       user: user == freezed ? _value.user : user as User,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
-      isUnauthorized: isUnauthorized == freezed
-          ? _value.isUnauthorized
-          : isUnauthorized as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
       isRefreshFetching: isRefreshFetching == freezed
           ? _value.isRefreshFetching
           : isRefreshFetching as bool,
@@ -196,16 +146,8 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
       {this.token,
       this.user,
       this.isFetching = false,
-      this.isUnauthorized = false,
-      this.isError = false,
-      this.errorStatusCode = 0,
-      this.errorBody = '',
       this.isRefreshFetching = false})
       : assert(isFetching != null),
-        assert(isUnauthorized != null),
-        assert(isError != null),
-        assert(errorStatusCode != null),
-        assert(errorBody != null),
         assert(isRefreshFetching != null);
 
   factory _$_AuthState.fromJson(Map<String, dynamic> json) =>
@@ -220,23 +162,11 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
   final bool isFetching;
   @JsonKey(defaultValue: false)
   @override
-  final bool isUnauthorized;
-  @JsonKey(defaultValue: false)
-  @override
-  final bool isError;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int errorStatusCode;
-  @JsonKey(defaultValue: '')
-  @override
-  final String errorBody;
-  @JsonKey(defaultValue: false)
-  @override
   final bool isRefreshFetching;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AuthState(token: $token, user: $user, isFetching: $isFetching, isUnauthorized: $isUnauthorized, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody, isRefreshFetching: $isRefreshFetching)';
+    return 'AuthState(token: $token, user: $user, isFetching: $isFetching, isRefreshFetching: $isRefreshFetching)';
   }
 
   @override
@@ -247,10 +177,6 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
       ..add(DiagnosticsProperty('token', token))
       ..add(DiagnosticsProperty('user', user))
       ..add(DiagnosticsProperty('isFetching', isFetching))
-      ..add(DiagnosticsProperty('isUnauthorized', isUnauthorized))
-      ..add(DiagnosticsProperty('isError', isError))
-      ..add(DiagnosticsProperty('errorStatusCode', errorStatusCode))
-      ..add(DiagnosticsProperty('errorBody', errorBody))
       ..add(DiagnosticsProperty('isRefreshFetching', isRefreshFetching));
   }
 
@@ -265,18 +191,6 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
             (identical(other.isFetching, isFetching) ||
                 const DeepCollectionEquality()
                     .equals(other.isFetching, isFetching)) &&
-            (identical(other.isUnauthorized, isUnauthorized) ||
-                const DeepCollectionEquality()
-                    .equals(other.isUnauthorized, isUnauthorized)) &&
-            (identical(other.isError, isError) ||
-                const DeepCollectionEquality()
-                    .equals(other.isError, isError)) &&
-            (identical(other.errorStatusCode, errorStatusCode) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorStatusCode, errorStatusCode)) &&
-            (identical(other.errorBody, errorBody) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorBody, errorBody)) &&
             (identical(other.isRefreshFetching, isRefreshFetching) ||
                 const DeepCollectionEquality()
                     .equals(other.isRefreshFetching, isRefreshFetching)));
@@ -288,10 +202,6 @@ class _$_AuthState with DiagnosticableTreeMixin implements _AuthState {
       const DeepCollectionEquality().hash(token) ^
       const DeepCollectionEquality().hash(user) ^
       const DeepCollectionEquality().hash(isFetching) ^
-      const DeepCollectionEquality().hash(isUnauthorized) ^
-      const DeepCollectionEquality().hash(isError) ^
-      const DeepCollectionEquality().hash(errorStatusCode) ^
-      const DeepCollectionEquality().hash(errorBody) ^
       const DeepCollectionEquality().hash(isRefreshFetching);
 
   @override
@@ -309,10 +219,6 @@ abstract class _AuthState implements AuthState {
       {OAuth2Token token,
       User user,
       bool isFetching,
-      bool isUnauthorized,
-      bool isError,
-      int errorStatusCode,
-      String errorBody,
       bool isRefreshFetching}) = _$_AuthState;
 
   factory _AuthState.fromJson(Map<String, dynamic> json) =
@@ -324,14 +230,6 @@ abstract class _AuthState implements AuthState {
   User get user;
   @override
   bool get isFetching;
-  @override
-  bool get isUnauthorized;
-  @override
-  bool get isError;
-  @override
-  int get errorStatusCode;
-  @override
-  String get errorBody;
   @override
   bool get isRefreshFetching;
   @override

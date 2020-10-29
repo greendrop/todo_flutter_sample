@@ -23,10 +23,7 @@ class _$TaskListStateTearOff {
       int perPage = _taskListPerPage,
       int maxPage = 1,
       bool isLastFetched = true,
-      bool isFetching = false,
-      bool isError = false,
-      int errorStatusCode = 0,
-      String errorBody = ''}) {
+      bool isFetching = false}) {
     return _TaskListState(
       tasks: tasks,
       totalCount: totalCount,
@@ -35,9 +32,6 @@ class _$TaskListStateTearOff {
       maxPage: maxPage,
       isLastFetched: isLastFetched,
       isFetching: isFetching,
-      isError: isError,
-      errorStatusCode: errorStatusCode,
-      errorBody: errorBody,
     );
   }
 }
@@ -53,9 +47,6 @@ mixin _$TaskListState {
   int get maxPage;
   bool get isLastFetched;
   bool get isFetching;
-  bool get isError;
-  int get errorStatusCode;
-  String get errorBody;
 
   Map<String, dynamic> toJson();
   $TaskListStateCopyWith<TaskListState> get copyWith;
@@ -72,10 +63,7 @@ abstract class $TaskListStateCopyWith<$Res> {
       int perPage,
       int maxPage,
       bool isLastFetched,
-      bool isFetching,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      bool isFetching});
 }
 
 class _$TaskListStateCopyWithImpl<$Res>
@@ -95,9 +83,6 @@ class _$TaskListStateCopyWithImpl<$Res>
     Object maxPage = freezed,
     Object isLastFetched = freezed,
     Object isFetching = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
       tasks: tasks == freezed ? _value.tasks : tasks as List<Task>,
@@ -110,11 +95,6 @@ class _$TaskListStateCopyWithImpl<$Res>
           : isLastFetched as bool,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 }
@@ -132,10 +112,7 @@ abstract class _$TaskListStateCopyWith<$Res>
       int perPage,
       int maxPage,
       bool isLastFetched,
-      bool isFetching,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+      bool isFetching});
 }
 
 class __$TaskListStateCopyWithImpl<$Res>
@@ -157,9 +134,6 @@ class __$TaskListStateCopyWithImpl<$Res>
     Object maxPage = freezed,
     Object isLastFetched = freezed,
     Object isFetching = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_TaskListState(
       tasks: tasks == freezed ? _value.tasks : tasks as List<Task>,
@@ -172,11 +146,6 @@ class __$TaskListStateCopyWithImpl<$Res>
           : isLastFetched as bool,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 }
@@ -190,19 +159,13 @@ class _$_TaskListState implements _TaskListState {
       this.perPage = _taskListPerPage,
       this.maxPage = 1,
       this.isLastFetched = true,
-      this.isFetching = false,
-      this.isError = false,
-      this.errorStatusCode = 0,
-      this.errorBody = ''})
+      this.isFetching = false})
       : assert(totalCount != null),
         assert(page != null),
         assert(perPage != null),
         assert(maxPage != null),
         assert(isLastFetched != null),
-        assert(isFetching != null),
-        assert(isError != null),
-        assert(errorStatusCode != null),
-        assert(errorBody != null);
+        assert(isFetching != null);
 
   factory _$_TaskListState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskListStateFromJson(json);
@@ -227,19 +190,10 @@ class _$_TaskListState implements _TaskListState {
   @JsonKey(defaultValue: false)
   @override
   final bool isFetching;
-  @JsonKey(defaultValue: false)
-  @override
-  final bool isError;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int errorStatusCode;
-  @JsonKey(defaultValue: '')
-  @override
-  final String errorBody;
 
   @override
   String toString() {
-    return 'TaskListState(tasks: $tasks, totalCount: $totalCount, page: $page, perPage: $perPage, maxPage: $maxPage, isLastFetched: $isLastFetched, isFetching: $isFetching, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskListState(tasks: $tasks, totalCount: $totalCount, page: $page, perPage: $perPage, maxPage: $maxPage, isLastFetched: $isLastFetched, isFetching: $isFetching)';
   }
 
   @override
@@ -264,16 +218,7 @@ class _$_TaskListState implements _TaskListState {
                     .equals(other.isLastFetched, isLastFetched)) &&
             (identical(other.isFetching, isFetching) ||
                 const DeepCollectionEquality()
-                    .equals(other.isFetching, isFetching)) &&
-            (identical(other.isError, isError) ||
-                const DeepCollectionEquality()
-                    .equals(other.isError, isError)) &&
-            (identical(other.errorStatusCode, errorStatusCode) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorStatusCode, errorStatusCode)) &&
-            (identical(other.errorBody, errorBody) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorBody, errorBody)));
+                    .equals(other.isFetching, isFetching)));
   }
 
   @override
@@ -285,10 +230,7 @@ class _$_TaskListState implements _TaskListState {
       const DeepCollectionEquality().hash(perPage) ^
       const DeepCollectionEquality().hash(maxPage) ^
       const DeepCollectionEquality().hash(isLastFetched) ^
-      const DeepCollectionEquality().hash(isFetching) ^
-      const DeepCollectionEquality().hash(isError) ^
-      const DeepCollectionEquality().hash(errorStatusCode) ^
-      const DeepCollectionEquality().hash(errorBody);
+      const DeepCollectionEquality().hash(isFetching);
 
   @override
   _$TaskListStateCopyWith<_TaskListState> get copyWith =>
@@ -308,10 +250,7 @@ abstract class _TaskListState implements TaskListState {
       int perPage,
       int maxPage,
       bool isLastFetched,
-      bool isFetching,
-      bool isError,
-      int errorStatusCode,
-      String errorBody}) = _$_TaskListState;
+      bool isFetching}) = _$_TaskListState;
 
   factory _TaskListState.fromJson(Map<String, dynamic> json) =
       _$_TaskListState.fromJson;
@@ -330,12 +269,6 @@ abstract class _TaskListState implements TaskListState {
   bool get isLastFetched;
   @override
   bool get isFetching;
-  @override
-  bool get isError;
-  @override
-  int get errorStatusCode;
-  @override
-  String get errorBody;
   @override
   _$TaskListStateCopyWith<_TaskListState> get copyWith;
 }

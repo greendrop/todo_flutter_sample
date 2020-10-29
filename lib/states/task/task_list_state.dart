@@ -23,9 +23,6 @@ abstract class TaskListState with _$TaskListState {
     @Default(1) int maxPage,
     @Default(true) bool isLastFetched,
     @Default(false) bool isFetching,
-    @Default(false) bool isError,
-    @Default(0) int errorStatusCode,
-    @Default('') String errorBody,
   }) = _TaskListState;
   factory TaskListState.fromJson(Map<String, dynamic> json) {
     return _$TaskListStateFromJson(json);
@@ -37,67 +34,48 @@ class TaskListStateNotifier extends StateNotifier<TaskListState> {
 
   final Reader read;
 
-  TaskListState setTasks(List<Task> tasks) {
-    return state = state.copyWith(tasks: tasks);
+  void setTasks(List<Task> tasks) {
+    state = state.copyWith(tasks: tasks);
   }
 
-  TaskListState setTotalCount(int totalCount) {
-    return state = state.copyWith(totalCount: totalCount);
+  void setTotalCount(int totalCount) {
+    state = state.copyWith(totalCount: totalCount);
   }
 
-  TaskListState setPage(int page) {
+  void setPage(int page) {
     final isLastFetched = page >= state.maxPage;
-    return state = state.copyWith(page: page, isLastFetched: isLastFetched);
+    state = state.copyWith(page: page, isLastFetched: isLastFetched);
   }
 
-  TaskListState setPerPage(int perPage) {
-    return state = state.copyWith(perPage: perPage);
+  void setPerPage(int perPage) {
+    state = state.copyWith(perPage: perPage);
   }
 
-  TaskListState setMaxPage(int maxPage) {
+  void setMaxPage(int maxPage) {
     final isLastFetched = state.page >= maxPage;
-    return state =
-        state.copyWith(maxPage: maxPage, isLastFetched: isLastFetched);
+    state = state.copyWith(maxPage: maxPage, isLastFetched: isLastFetched);
   }
 
   // ignore: avoid_positional_boolean_parameters
-  TaskListState setIsFetching(bool isFetching) {
-    return state = state.copyWith(isFetching: isFetching);
+  void setIsFetching(bool isFetching) {
+    state = state.copyWith(isFetching: isFetching);
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  TaskListState setIsError(bool isError) {
-    return state = state.copyWith(isError: isError);
-  }
-
-  TaskListState setErrorStatusCode(int errorStatusCode) {
-    return state = state.copyWith(errorStatusCode: errorStatusCode);
-  }
-
-  TaskListState setErrorBody(String errorBody) {
-    return state = state.copyWith(errorBody: errorBody);
-  }
-
-  TaskListState clearTasks() {
-    return state = state.copyWith(
+  void clearTasks() {
+    state = state.copyWith(
         tasks: null, totalCount: 0, page: 1, maxPage: 1, isLastFetched: true);
   }
 
-  TaskListState clear() {
+  void clear() {
     clearTasks();
     setIsFetching(false);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
-    return state;
   }
 
-  Future<TaskListState> fetchTasks(Map<String, String> queryParameters) async {
-    final completer = Completer<TaskListState>();
+  Future<void> fetchTasks(Map<String, String> queryParameters) async {
+    final completer = Completer<void>();
 
     clearTasks();
     setIsFetching(true);
-    setIsError(false);
 
     final appConfig = AppConfig();
     final apiClient =
@@ -107,34 +85,26 @@ class TaskListStateNotifier extends StateNotifier<TaskListState> {
         authState.token.accessToken;
     final tasksApi = openapi.TasksApi(apiClient);
 
-    try {
-      final response =
-          await tasksApi.apiV1TasksGet(page: 1, perPage: _taskListPerPage);
-      setTasks(
-          response.data.map((item) => Task.fromJson(item.toJson())).toList());
-      setPage(response.paging.currentPage.toInt());
-      setPerPage(response.paging.limitValue.toInt());
-      setTotalCount(response.paging.totalCount.toInt());
-      setMaxPage(response.paging.totalPages.toInt());
-    } on openapi.ApiException catch (error) {
-      setIsError(true);
-      setErrorStatusCode(error.code);
-      setErrorBody(error.message);
-    }
-
+    final response =
+        await tasksApi.apiV1TasksGet(page: 1, perPage: _taskListPerPage);
+    setTasks(
+        response.data.map((item) => Task.fromJson(item.toJson())).toList());
+    setPage(response.paging.currentPage.toInt());
+    setPerPage(response.paging.limitValue.toInt());
+    setTotalCount(response.paging.totalCount.toInt());
+    setMaxPage(response.paging.totalPages.toInt());
     setIsFetching(false);
-    completer.complete(state);
+
+    completer.complete();
     return completer.future;
   }
 
-  Future<TaskListState> fetchAdditionalTasks(
-      Map<String, String> queryParameters) async {
-    final completer = Completer<TaskListState>();
+  Future<void> fetchAdditionalTasks(Map<String, String> queryParameters) async {
+    final completer = Completer<void>();
     final page = state.page + 1;
     final perPage = state.perPage;
 
     setIsFetching(true);
-    setIsError(false);
 
     final appConfig = AppConfig();
     final apiClient =
@@ -144,23 +114,16 @@ class TaskListStateNotifier extends StateNotifier<TaskListState> {
         authState.token.accessToken;
     final tasksApi = openapi.TasksApi(apiClient);
 
-    try {
-      final response =
-          await tasksApi.apiV1TasksGet(page: page, perPage: perPage);
-      setTasks(
-          response.data.map((item) => Task.fromJson(item.toJson())).toList());
-      setPage(response.paging.currentPage.toInt());
-      setPerPage(response.paging.limitValue.toInt());
-      setTotalCount(response.paging.totalCount.toInt());
-      setMaxPage(response.paging.totalPages.toInt());
-    } on openapi.ApiException catch (error) {
-      setIsError(true);
-      setErrorStatusCode(error.code);
-      setErrorBody(error.message);
-    }
-
+    final response = await tasksApi.apiV1TasksGet(page: page, perPage: perPage);
+    setTasks(
+        response.data.map((item) => Task.fromJson(item.toJson())).toList());
+    setPage(response.paging.currentPage.toInt());
+    setPerPage(response.paging.limitValue.toInt());
+    setTotalCount(response.paging.totalCount.toInt());
+    setMaxPage(response.paging.totalPages.toInt());
     setIsFetching(false);
-    completer.complete(state);
+
+    completer.complete();
     return completer.future;
   }
 }

@@ -15,9 +15,6 @@ part 'task_create_state.g.dart';
 abstract class TaskCreateState with _$TaskCreateState {
   const factory TaskCreateState({
     @Default(false) bool isCreating,
-    @Default(false) bool isError,
-    @Default(0) int errorStatusCode,
-    @Default('') String errorBody,
   }) = _TaskCreateState;
   factory TaskCreateState.fromJson(Map<String, dynamic> json) {
     return _$TaskCreateStateFromJson(json);
@@ -30,36 +27,18 @@ class TaskCreateStateNotifier extends StateNotifier<TaskCreateState> {
   final Reader read;
 
   // ignore: avoid_positional_boolean_parameters
-  TaskCreateState setIsCreating(bool isCreating) {
-    return state = state.copyWith(isCreating: isCreating);
+  void setIsCreating(bool isCreating) {
+    state = state.copyWith(isCreating: isCreating);
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  TaskCreateState setIsError(bool isError) {
-    return state = state.copyWith(isError: isError);
-  }
-
-  TaskCreateState setErrorStatusCode(int errorStatusCode) {
-    return state = state.copyWith(errorStatusCode: errorStatusCode);
-  }
-
-  TaskCreateState setErrorBody(String errorBody) {
-    return state = state.copyWith(errorBody: errorBody);
-  }
-
-  TaskCreateState clear() {
+  void clear() {
     setIsCreating(false);
-    setIsError(false);
-    setErrorStatusCode(0);
-    setErrorBody('');
-    return state;
   }
 
-  Future<TaskCreateState> createTask(TaskForm taskForm) async {
-    final completer = Completer<TaskCreateState>();
+  Future<void> createTask(TaskForm taskForm) async {
+    final completer = Completer<void>();
 
     setIsCreating(true);
-    setIsError(false);
 
     final appConfig = AppConfig();
     final apiClient =
@@ -74,16 +53,10 @@ class TaskCreateStateNotifier extends StateNotifier<TaskCreateState> {
       ..done = taskForm.done;
     final taskCreateSchema = openapi.TaskCreateSchema()..task = taskFormSchema;
 
-    try {
-      await tasksApi.apiV1TasksPost(taskCreateSchema: taskCreateSchema);
-    } on openapi.ApiException catch (error) {
-      setIsError(true);
-      setErrorStatusCode(error.code);
-      setErrorBody(error.message);
-    }
-
+    await tasksApi.apiV1TasksPost(taskCreateSchema: taskCreateSchema);
     setIsCreating(false);
-    completer.complete(state);
+
+    completer.complete();
     return completer.future;
   }
 }

@@ -16,16 +16,9 @@ class _$TaskCreateStateTearOff {
   const _$TaskCreateStateTearOff();
 
 // ignore: unused_element
-  _TaskCreateState call(
-      {bool isCreating = false,
-      bool isError = false,
-      int errorStatusCode = 0,
-      String errorBody = ''}) {
+  _TaskCreateState call({bool isCreating = false}) {
     return _TaskCreateState(
       isCreating: isCreating,
-      isError: isError,
-      errorStatusCode: errorStatusCode,
-      errorBody: errorBody,
     );
   }
 }
@@ -35,9 +28,6 @@ const $TaskCreateState = _$TaskCreateStateTearOff();
 
 mixin _$TaskCreateState {
   bool get isCreating;
-  bool get isError;
-  int get errorStatusCode;
-  String get errorBody;
 
   Map<String, dynamic> toJson();
   $TaskCreateStateCopyWith<TaskCreateState> get copyWith;
@@ -47,8 +37,7 @@ abstract class $TaskCreateStateCopyWith<$Res> {
   factory $TaskCreateStateCopyWith(
           TaskCreateState value, $Res Function(TaskCreateState) then) =
       _$TaskCreateStateCopyWithImpl<$Res>;
-  $Res call(
-      {bool isCreating, bool isError, int errorStatusCode, String errorBody});
+  $Res call({bool isCreating});
 }
 
 class _$TaskCreateStateCopyWithImpl<$Res>
@@ -62,18 +51,10 @@ class _$TaskCreateStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object isCreating = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
       isCreating:
           isCreating == freezed ? _value.isCreating : isCreating as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 }
@@ -84,8 +65,7 @@ abstract class _$TaskCreateStateCopyWith<$Res>
           _TaskCreateState value, $Res Function(_TaskCreateState) then) =
       __$TaskCreateStateCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {bool isCreating, bool isError, int errorStatusCode, String errorBody});
+  $Res call({bool isCreating});
 }
 
 class __$TaskCreateStateCopyWithImpl<$Res>
@@ -101,33 +81,18 @@ class __$TaskCreateStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object isCreating = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_TaskCreateState(
       isCreating:
           isCreating == freezed ? _value.isCreating : isCreating as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_TaskCreateState implements _TaskCreateState {
-  const _$_TaskCreateState(
-      {this.isCreating = false,
-      this.isError = false,
-      this.errorStatusCode = 0,
-      this.errorBody = ''})
-      : assert(isCreating != null),
-        assert(isError != null),
-        assert(errorStatusCode != null),
-        assert(errorBody != null);
+  const _$_TaskCreateState({this.isCreating = false})
+      : assert(isCreating != null);
 
   factory _$_TaskCreateState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskCreateStateFromJson(json);
@@ -135,19 +100,10 @@ class _$_TaskCreateState implements _TaskCreateState {
   @JsonKey(defaultValue: false)
   @override
   final bool isCreating;
-  @JsonKey(defaultValue: false)
-  @override
-  final bool isError;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int errorStatusCode;
-  @JsonKey(defaultValue: '')
-  @override
-  final String errorBody;
 
   @override
   String toString() {
-    return 'TaskCreateState(isCreating: $isCreating, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskCreateState(isCreating: $isCreating)';
   }
 
   @override
@@ -156,25 +112,12 @@ class _$_TaskCreateState implements _TaskCreateState {
         (other is _TaskCreateState &&
             (identical(other.isCreating, isCreating) ||
                 const DeepCollectionEquality()
-                    .equals(other.isCreating, isCreating)) &&
-            (identical(other.isError, isError) ||
-                const DeepCollectionEquality()
-                    .equals(other.isError, isError)) &&
-            (identical(other.errorStatusCode, errorStatusCode) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorStatusCode, errorStatusCode)) &&
-            (identical(other.errorBody, errorBody) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorBody, errorBody)));
+                    .equals(other.isCreating, isCreating)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(isCreating) ^
-      const DeepCollectionEquality().hash(isError) ^
-      const DeepCollectionEquality().hash(errorStatusCode) ^
-      const DeepCollectionEquality().hash(errorBody);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(isCreating);
 
   @override
   _$TaskCreateStateCopyWith<_TaskCreateState> get copyWith =>
@@ -187,23 +130,13 @@ class _$_TaskCreateState implements _TaskCreateState {
 }
 
 abstract class _TaskCreateState implements TaskCreateState {
-  const factory _TaskCreateState(
-      {bool isCreating,
-      bool isError,
-      int errorStatusCode,
-      String errorBody}) = _$_TaskCreateState;
+  const factory _TaskCreateState({bool isCreating}) = _$_TaskCreateState;
 
   factory _TaskCreateState.fromJson(Map<String, dynamic> json) =
       _$_TaskCreateState.fromJson;
 
   @override
   bool get isCreating;
-  @override
-  bool get isError;
-  @override
-  int get errorStatusCode;
-  @override
-  String get errorBody;
   @override
   _$TaskCreateStateCopyWith<_TaskCreateState> get copyWith;
 }

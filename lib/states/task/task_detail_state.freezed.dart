@@ -16,18 +16,10 @@ class _$TaskDetailStateTearOff {
   const _$TaskDetailStateTearOff();
 
 // ignore: unused_element
-  _TaskDetailState call(
-      {Task task,
-      bool isFetching = false,
-      bool isError = false,
-      int errorStatusCode = 0,
-      String errorBody = ''}) {
+  _TaskDetailState call({Task task, bool isFetching = false}) {
     return _TaskDetailState(
       task: task,
       isFetching: isFetching,
-      isError: isError,
-      errorStatusCode: errorStatusCode,
-      errorBody: errorBody,
     );
   }
 }
@@ -38,9 +30,6 @@ const $TaskDetailState = _$TaskDetailStateTearOff();
 mixin _$TaskDetailState {
   Task get task;
   bool get isFetching;
-  bool get isError;
-  int get errorStatusCode;
-  String get errorBody;
 
   Map<String, dynamic> toJson();
   $TaskDetailStateCopyWith<TaskDetailState> get copyWith;
@@ -50,12 +39,7 @@ abstract class $TaskDetailStateCopyWith<$Res> {
   factory $TaskDetailStateCopyWith(
           TaskDetailState value, $Res Function(TaskDetailState) then) =
       _$TaskDetailStateCopyWithImpl<$Res>;
-  $Res call(
-      {Task task,
-      bool isFetching,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+  $Res call({Task task, bool isFetching});
 
   $TaskCopyWith<$Res> get task;
 }
@@ -72,19 +56,11 @@ class _$TaskDetailStateCopyWithImpl<$Res>
   $Res call({
     Object task = freezed,
     Object isFetching = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_value.copyWith(
       task: task == freezed ? _value.task : task as Task,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 
@@ -105,12 +81,7 @@ abstract class _$TaskDetailStateCopyWith<$Res>
           _TaskDetailState value, $Res Function(_TaskDetailState) then) =
       __$TaskDetailStateCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {Task task,
-      bool isFetching,
-      bool isError,
-      int errorStatusCode,
-      String errorBody});
+  $Res call({Task task, bool isFetching});
 
   @override
   $TaskCopyWith<$Res> get task;
@@ -130,35 +101,19 @@ class __$TaskDetailStateCopyWithImpl<$Res>
   $Res call({
     Object task = freezed,
     Object isFetching = freezed,
-    Object isError = freezed,
-    Object errorStatusCode = freezed,
-    Object errorBody = freezed,
   }) {
     return _then(_TaskDetailState(
       task: task == freezed ? _value.task : task as Task,
       isFetching:
           isFetching == freezed ? _value.isFetching : isFetching as bool,
-      isError: isError == freezed ? _value.isError : isError as bool,
-      errorStatusCode: errorStatusCode == freezed
-          ? _value.errorStatusCode
-          : errorStatusCode as int,
-      errorBody: errorBody == freezed ? _value.errorBody : errorBody as String,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_TaskDetailState implements _TaskDetailState {
-  const _$_TaskDetailState(
-      {this.task,
-      this.isFetching = false,
-      this.isError = false,
-      this.errorStatusCode = 0,
-      this.errorBody = ''})
-      : assert(isFetching != null),
-        assert(isError != null),
-        assert(errorStatusCode != null),
-        assert(errorBody != null);
+  const _$_TaskDetailState({this.task, this.isFetching = false})
+      : assert(isFetching != null);
 
   factory _$_TaskDetailState.fromJson(Map<String, dynamic> json) =>
       _$_$_TaskDetailStateFromJson(json);
@@ -168,19 +123,10 @@ class _$_TaskDetailState implements _TaskDetailState {
   @JsonKey(defaultValue: false)
   @override
   final bool isFetching;
-  @JsonKey(defaultValue: false)
-  @override
-  final bool isError;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int errorStatusCode;
-  @JsonKey(defaultValue: '')
-  @override
-  final String errorBody;
 
   @override
   String toString() {
-    return 'TaskDetailState(task: $task, isFetching: $isFetching, isError: $isError, errorStatusCode: $errorStatusCode, errorBody: $errorBody)';
+    return 'TaskDetailState(task: $task, isFetching: $isFetching)';
   }
 
   @override
@@ -191,26 +137,14 @@ class _$_TaskDetailState implements _TaskDetailState {
                 const DeepCollectionEquality().equals(other.task, task)) &&
             (identical(other.isFetching, isFetching) ||
                 const DeepCollectionEquality()
-                    .equals(other.isFetching, isFetching)) &&
-            (identical(other.isError, isError) ||
-                const DeepCollectionEquality()
-                    .equals(other.isError, isError)) &&
-            (identical(other.errorStatusCode, errorStatusCode) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorStatusCode, errorStatusCode)) &&
-            (identical(other.errorBody, errorBody) ||
-                const DeepCollectionEquality()
-                    .equals(other.errorBody, errorBody)));
+                    .equals(other.isFetching, isFetching)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(task) ^
-      const DeepCollectionEquality().hash(isFetching) ^
-      const DeepCollectionEquality().hash(isError) ^
-      const DeepCollectionEquality().hash(errorStatusCode) ^
-      const DeepCollectionEquality().hash(errorBody);
+      const DeepCollectionEquality().hash(isFetching);
 
   @override
   _$TaskDetailStateCopyWith<_TaskDetailState> get copyWith =>
@@ -223,12 +157,8 @@ class _$_TaskDetailState implements _TaskDetailState {
 }
 
 abstract class _TaskDetailState implements TaskDetailState {
-  const factory _TaskDetailState(
-      {Task task,
-      bool isFetching,
-      bool isError,
-      int errorStatusCode,
-      String errorBody}) = _$_TaskDetailState;
+  const factory _TaskDetailState({Task task, bool isFetching}) =
+      _$_TaskDetailState;
 
   factory _TaskDetailState.fromJson(Map<String, dynamic> json) =
       _$_TaskDetailState.fromJson;
@@ -237,12 +167,6 @@ abstract class _TaskDetailState implements TaskDetailState {
   Task get task;
   @override
   bool get isFetching;
-  @override
-  bool get isError;
-  @override
-  int get errorStatusCode;
-  @override
-  String get errorBody;
   @override
   _$TaskDetailStateCopyWith<_TaskDetailState> get copyWith;
 }
